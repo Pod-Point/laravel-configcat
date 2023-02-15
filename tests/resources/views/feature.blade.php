@@ -5,7 +5,7 @@
         @endfeature
 
         @feature('disabled_feature')
-          You can't see me
+          I am hidden
         @endfeature
     </body>
 </html>

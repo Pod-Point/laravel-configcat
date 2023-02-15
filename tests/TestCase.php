@@ -42,13 +42,19 @@ abstract class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app)
     {
-        dd(dirname(__FILE__));
-
         $app['config']->set('configcat.key', 'testing');
+
+        $app['config']->set('configcat.user', function ($user) {
+            return new \ConfigCat\User($user->id, $user->email);
+        });
+
         $app['config']->set('configcat.overrides', [
             'enabled' => false,
             'file' => storage_path('app/features/configcat.json'),
         ]);
-        $app['config']->set('view.paths', ['resources/views']);
+
+        $app['config']->set('view.paths', [
+            dirname(__FILE__).DIRECTORY_SEPARATOR.'resources/views',
+        ]);
     }
 }
