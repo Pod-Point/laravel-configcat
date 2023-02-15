@@ -2,8 +2,8 @@
 
 namespace PodPoint\ConfigCat\Rules;
 
-use PodPoint\ConfigCat\ConfigCat;
 use Illuminate\Validation\Concerns\ValidatesAttributes;
+use PodPoint\ConfigCat\Facades\Features;
 
 class RequiredIfFeature
 {
@@ -17,7 +17,7 @@ class RequiredIfFeature
             );
         }
 
-        if (ConfigCat::get($parameters[0]) !== false) {
+        if (Features::get($parameters[0]) !== false) {
             return $this->validateRequired($attribute, $value);
         }
 

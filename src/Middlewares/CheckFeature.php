@@ -2,8 +2,8 @@
 
 namespace PodPoint\ConfigCat\Middlewares;
 
-use PodPoint\ConfigCat\ConfigCat;
 use Closure;
+use PodPoint\ConfigCat\Facades\Features;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckFeature
@@ -18,7 +18,7 @@ class CheckFeature
      */
     public function handle($request, Closure $next, string $featureName)
     {
-        abort_if(ConfigCat::get($featureName) === false, Response::HTTP_NOT_FOUND);
+        abort_if(Features::get($featureName) === false, Response::HTTP_NOT_FOUND);
 
         return $next($request);
     }
