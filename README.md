@@ -169,6 +169,8 @@ Features::fake(['new_registration_flow' => true]);
 
 When running tests within a browser which doesn't share the same instance of the application, using mocks or fakes is not applicable. This is why we provide some overrides through ConfigCat SDK which will make the client under the hood localhost only and will use a locally generated `json` file in order to read the feature flags for the system under test.
 
+First of all, you will need to make sure to enable `overrides` from [`config/configcat.php`](config/configcat.php). You could also optionally configure the file path for the `json` file if you wish to. The file will be automatically created for you when using overrides.
+
 Similarly to `Features::fake()` you can configure some predefined feature flags which will be saved into a `json` file:
 
 ```php
@@ -176,8 +178,6 @@ use PodPoint\ConfigCat\Facades\Features;
 
 Features::override(['new_registration_flow' => true]);
 ```
-
-Enabling or not overrides as well as configuring the file path for the `json` file can be achieved from [`config/configcat.php`](config/configcat.php).
 
 ## Testing
 
@@ -198,7 +198,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Credits
 
 - [configcat/php-sdk](https://github.com/configcat/php-sdk)
-- [ylsideas/feature-flags](https://github.com/ylsideas/feature-flags) for the inspiration
+- [ylsideas/feature-flags](https://github.com/ylsideas/feature-flags) for inspiration
 - [Pod Point](https://github.com/pod-point)
 - [All Contributors](https://github.com/pod-point/laravel-configcat/graphs/contributors)
 
