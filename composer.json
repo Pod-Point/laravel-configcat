@@ -19,11 +19,10 @@
     "require": {
         "php": ">=7.1",
         "configcat/configcat-client": "^6.2",
-        "illuminate/contracts": ">=5.0",
-        "laravel/framework": "5.4.*",
-        "orchestra/testbench": "3.4.*"
+        "illuminate/contracts": ">=5.4"
     },
     "require-dev": {
+        "orchestra/testbench": ">=3.4",
         "phpunit/phpunit": ">=5.7",
         "mockery/mockery": ">=0.9.4"
     },
