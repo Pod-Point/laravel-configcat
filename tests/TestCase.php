@@ -21,6 +21,20 @@ abstract class TestCase extends Orchestra
     }
 
     /**
+     * Override application aliases.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     *
+     * @return array
+     */
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Features' => \PodPoint\ConfigCat\Facades\Features::class,
+        ];
+    }
+
+    /**
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
@@ -29,5 +43,9 @@ abstract class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('configcat.key', 'testing');
+        $app['config']->set('configcat.overrides', [
+            'enabled' => false,
+            'file' => storage_path('app/features/configcat.json'),
+        ]);
     }
 }

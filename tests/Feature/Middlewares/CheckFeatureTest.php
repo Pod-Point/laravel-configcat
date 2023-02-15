@@ -41,6 +41,17 @@ class CheckFeatureTest extends TestCase
         $this->post('/foo')->assertOk();
     }
 
+    public function test_the_middleware_can_show_features_when_the_feature_flag_exists_and_is_an_integer()
+    {
+        Features::fake(['some_feature' => 123]);
+
+        Route::post('/foo', function () {
+            return response('Bar!');
+        })->middleware('feature:some_feature');
+
+        $this->post('/foo')->assertOk();
+    }
+
     public function test_features_that_dont_exist_are_treated_like_disabled_features_by_the_middleware()
     {
         Route::get('/foo', function () {

@@ -46,4 +46,17 @@ class RequiredIfFeatureTest extends TestCase
 
         $this->assertTrue($validator->errors()->has('some_field'));
     }
+
+    public function test_a_field_can_be_required_when_a_feature_flag_is_defined_as_an_integer()
+    {
+        Features::fake(['some_feature' => 123]);
+
+        $validator = Validator::make([
+            'foo' => 'bar',
+        ], [
+            'some_field' => 'required_if_feature:some_feature',
+        ]);
+
+        $this->assertTrue($validator->errors()->has('some_field'));
+    }
 }
