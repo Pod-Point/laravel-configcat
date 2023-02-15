@@ -58,4 +58,11 @@ class ConfigCatTest extends TestCase
             File::get(storage_path('app/features/configcat.json'))
         );
     }
+
+    public function test_the_blade_directive_will_render_something_when_the_feature_flag_is_enabled()
+    {
+        Route::get('/foo', function () {
+            return view('Bar!');
+        })->middleware('feature:foo');
+    }
 }
