@@ -9,7 +9,6 @@ use ConfigCat\Override\FlagOverrides;
 use ConfigCat\Override\OverrideBehaviour;
 use ConfigCat\Override\OverrideDataSource;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class ConfigCat implements ProviderContract
 {
@@ -75,7 +74,7 @@ class ConfigCat implements ProviderContract
     private static function localFile(string $filepath): string
     {
         if (! File::exists($filepath)) {
-            $directory = rtrim(Str::before($filepath, basename($filepath)), '/');
+            $directory = rtrim(strstr($filepath, basename($filepath), true), '/');
             File::makeDirectory($directory, 0755, true, true);
             File::put($filepath, '{"flags":{}}');
         }

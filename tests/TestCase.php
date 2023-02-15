@@ -2,6 +2,8 @@
 
 namespace PodPoint\ConfigCat\Tests;
 
+use Closure;
+use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 use PodPoint\ConfigCat\ConfigCatServiceProvider;
 
@@ -56,5 +58,17 @@ abstract class TestCase extends Orchestra
         $app['config']->set('view.paths', [
             dirname(__FILE__).DIRECTORY_SEPARATOR.'resources/views',
         ]);
+    }
+
+    /**
+     * Mock an instance of an object in the container.
+     *
+     * @param  string  $abstract
+     * @param  \Closure|null  $mock
+     * @return \Mockery\MockInterface
+     */
+    protected function mock($abstract, Closure $mock = null)
+    {
+        return $this->instance($abstract, Mockery::mock(...array_filter(func_get_args())));
     }
 }

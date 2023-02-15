@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use PodPoint\ConfigCat\Facades\Features;
 use PodPoint\ConfigCat\Middlewares\CheckFeature;
 use PodPoint\ConfigCat\Rules\RequiredIfFeature;
 
@@ -55,10 +54,14 @@ class ConfigCatServiceProvider extends ServiceProvider
     private function registerConfigCatClient()
     {
         $this->app->singleton(ClientInterface::class, function ($app) {
+            $logger = $app->version() >= '5.6.0'
+                ? Log::channel($app['config']['configcat.log.channel'])
+                : $app['log'];
+
             return new ConfigCatClient($app['config']['configcat.key'], [
                 ClientOptions::CACHE => new LaravelCache(Cache::store($app['config']['configcat.cache.store'])),
                 ClientOptions::CACHE_REFRESH_INTERVAL => $app['config']['configcat.cache.interval'],
-                ClientOptions::LOGGER => Log::channel($app['config']['configcat.log.channel']),
+                ClientOptions::LOGGER => $logger,
                 ClientOptions::LOG_LEVEL => $app['config']['configcat.log.level'],
                 ClientOptions::FLAG_OVERRIDES => $app['config']['configcat.overrides.enabled']
                     ? ConfigCat::overrides($app['config']['configcat.overrides.file'])
@@ -82,8 +85,14 @@ class ConfigCatServiceProvider extends ServiceProvider
 
     protected function bladeDirectives()
     {
-        Blade::if('feature', function (string $feature, $user = null) {
-            return Features::get($feature, $user) !== false;
+        Blade::directive('feature', function (string $feature, $user = null) {
+            $expression = $user ? "{$feature}, {$user}" : "{$feature}";
+
+            return "<?php if (feature({$expression}) !== false): ?>";
+        });
+
+        Blade::directive('endfeature', function () {
+            return "<?php endif; ?>";
         });
     }
 

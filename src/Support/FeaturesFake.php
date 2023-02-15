@@ -4,12 +4,9 @@ namespace PodPoint\ConfigCat\Support;
 
 use PodPoint\ConfigCat\Contracts\ProviderContract;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\ForwardsCalls;
 
 class FeaturesFake
 {
-    use ForwardsCalls;
-
     protected $provider;
     protected $featureFlags = [];
     protected $flagCounts = [];
@@ -52,7 +49,7 @@ class FeaturesFake
 
     public function __call(string $method, array $args)
     {
-        return $this->forwardCallTo($this->provider, $method, $args);
+        return $this->provider->{$method}(...$args);
     }
 
     protected function getCount(string $feature)

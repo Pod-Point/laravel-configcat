@@ -16,7 +16,7 @@ class CheckFeatureTest extends TestCase
             return response('Bar!');
         })->middleware('feature:some_feature');
 
-        $this->get('/foo')->assertNotFound();
+        $this->get('/foo')->assertStatus(404);
     }
 
     public function test_the_middleware_can_show_features()
@@ -27,7 +27,7 @@ class CheckFeatureTest extends TestCase
             return response('Bar!');
         })->middleware('feature:some_feature');
 
-        $this->post('/foo')->assertOk();
+        $this->post('/foo')->assertSuccessful();
     }
 
     public function test_the_middleware_can_show_features_when_the_feature_flag_exists_and_is_a_string()
@@ -38,7 +38,7 @@ class CheckFeatureTest extends TestCase
             return response('Bar!');
         })->middleware('feature:some_feature');
 
-        $this->post('/foo')->assertOk();
+        $this->post('/foo')->assertSuccessful();
     }
 
     public function test_the_middleware_can_show_features_when_the_feature_flag_exists_and_is_an_integer()
@@ -49,7 +49,7 @@ class CheckFeatureTest extends TestCase
             return response('Bar!');
         })->middleware('feature:some_feature');
 
-        $this->post('/foo')->assertOk();
+        $this->post('/foo')->assertSuccessful();
     }
 
     public function test_features_that_dont_exist_are_treated_like_disabled_features_by_the_middleware()
@@ -58,6 +58,6 @@ class CheckFeatureTest extends TestCase
             return response('Bar!');
         })->middleware('feature:foo');
 
-        $this->get('/foo')->assertNotFound();
+        $this->get('/foo')->assertStatus(404);
     }
 }
