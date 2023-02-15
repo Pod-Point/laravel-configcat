@@ -4,7 +4,9 @@
     "keywords": [
         "pod-point",
         "laravel",
-        "configcat"
+        "configcat",
+        "feature",
+        "flags"
     ],
     "homepage": "https://github.com/pod-point/laravel-configcat",
     "license": "MIT",
