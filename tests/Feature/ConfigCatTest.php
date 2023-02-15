@@ -2,6 +2,8 @@
 
 namespace PodPoint\ConfigCat\Tests\Feature;
 
+use PodPoint\ConfigCat\Tests\TestCase;
+
 class ConfigCatTest extends TestCase
 {
     /** @test */
