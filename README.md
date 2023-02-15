@@ -1,7 +1,7 @@
 # Implement feature flags with ConfigCat cloud service
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pod-point/laravel-configcat.svg?style=flat-square)](https://packagist.org/packages/pod-point/laravel-configcat)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/pod-point/laravel-configcat/run-tests?label=tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pod-point/laravel-configcat/run-tests.yml?branch=main&label=tests)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Total Downloads](https://img.shields.io/packagist/dt/pod-point/laravel-configcat.svg?style=flat-square)](https://packagist.org/packages/pod-point/laravel-configcat)
 
