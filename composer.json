@@ -1,12 +1,12 @@
 {
-    "name": "pod-point/package_slug",
-    "description": ":package_description",
+    "name": "pod-point/laravel-configcat",
+    "description": "Implement feature flags with ConfigCat cloud service",
     "keywords": [
         "pod-point",
         "laravel",
-        ":package_key"
+        "configcat"
     ],
-    "homepage": "https://github.com/pod-point/:package_slug",
+    "homepage": "https://github.com/pod-point/laravel-configcat",
     "license": "MIT",
     "authors": [
         {
@@ -15,27 +15,34 @@
         }
     ],
     "require": {
-        "php": "^7.2.5|^8.0",
-        "illuminate/contracts": "~7.0|^8.0"
+        "php": ">=7.1",
+        "configcat/configcat-client": "^6.2",
+        "illuminate/contracts": ">=5.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^5.0|^6.0"
+        "orchestra/testbench": ">=3.0"
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
-            "PodPoint\\Skeleton\\": "src"
-        }
+            "PodPoint\\ConfigCat\\": "src"
+        },
     },
     "autoload-dev": {
         "psr-4": {
-            "PodPoint\\Skeleton\\Tests\\": "tests"
+            "PodPoint\\ConfigCat\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "PodPoint\\Skeleton\\SkeletonServiceProvider"
-            ]
+                "PodPoint\\ConfigCat\\ConfigCatServiceProvider"
+            ],
+            "aliases": {
+                "Features": "PodPoint\\ConfigCat\\Facades\\Features"
+            }
         }
     },
     "scripts": {
