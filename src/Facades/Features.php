@@ -16,7 +16,11 @@ class Features extends Facade
     }
 
     /**
-     * Recommended to be used with in-memory unit/integration tests scenario.
+     * Fakes the Features facade completely using while using an array in-memory to
+     * store the faked feature flags.
+     *
+     * Recommended to be used with in-memory unit/integration tests scenario instead
+     * of end-to-end browser tests.
      *
      * @param array $flagsToFake
      * @return FeaturesFake

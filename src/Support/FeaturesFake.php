@@ -2,22 +2,31 @@
 
 namespace PodPoint\ConfigCat\Support;
 
-use PodPoint\ConfigCat\Contracts\ProviderContract;
+use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 use Illuminate\Support\Arr;
 
 class FeaturesFake
 {
+    /** @var FeatureFlagProviderContract */
     protected $provider;
+    /** @var array */
     protected $featureFlags = [];
+    /** @var array */
     protected $flagCounts = [];
 
-    public function __construct(ProviderContract $provider, $featureFlags = [])
+    public function __construct(FeatureFlagProviderContract $provider, $featureFlags = [])
     {
         $this->provider = $provider;
 
         $this->fake($featureFlags);
     }
 
+    /**
+     * Defines the faked feature flags.
+     *
+     * @param array $featureFlags
+     * @return self
+     */
     public function fake($featureFlags = []): self
     {
         $this->featureFlags = Arr::wrap($featureFlags);
@@ -26,6 +35,9 @@ class FeaturesFake
     }
 
     /**
+     * Retrieve a faked feature flag if it exists. Returns false if the faked
+     * feature flag is undefined.
+     *
      * @param string $feature
      * @return bool|string|int
      */
@@ -47,6 +59,13 @@ class FeaturesFake
         return $featureValue;
     }
 
+    /**
+     * Forwards any other calls to the feature flag provider instance.
+     *
+     * @param string $method
+     * @param array $args
+     * @return void
+     */
     public function __call(string $method, array $args)
     {
         return $this->provider->{$method}(...$args);

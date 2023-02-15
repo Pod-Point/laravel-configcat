@@ -58,7 +58,7 @@ class ConfigCatServiceProvider extends ServiceProvider
                 ? Log::channel($app['config']['configcat.log.channel'])
                 : $app['log'];
 
-            return new ConfigCatClient($app['config']['configcat.key'], [
+            $options = [
                 ClientOptions::CACHE => new LaravelCache(Cache::store($app['config']['configcat.cache.store'])),
                 ClientOptions::CACHE_REFRESH_INTERVAL => $app['config']['configcat.cache.interval'],
                 ClientOptions::LOGGER => $logger,
@@ -66,7 +66,9 @@ class ConfigCatServiceProvider extends ServiceProvider
                 ClientOptions::FLAG_OVERRIDES => $app['config']['configcat.overrides.enabled']
                     ? ConfigCat::overrides($app['config']['configcat.overrides.file'])
                     : null,
-            ]);
+            ];
+
+            return new ConfigCatClient($app['config']['configcat.key'], $options);
         });
     }
 

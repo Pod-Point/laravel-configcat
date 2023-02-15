@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckFeature
 {
     /**
-     * Handle an incoming request.
+     * Aborts with a 404 if a feature flag is undefined or explicitly set to false.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

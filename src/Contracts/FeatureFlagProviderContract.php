@@ -2,7 +2,7 @@
 
 namespace PodPoint\ConfigCat\Contracts;
 
-interface ProviderContract
+interface FeatureFlagProviderContract
 {
     /**
      * @param string $feature
