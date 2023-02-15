@@ -41,9 +41,9 @@ $flag = Features::get('new_registration_flow');
 $flag = feature('new_registration_flow');
 ```
 
-> **Note:** You can define the actual value of a feature flag to be `true` or `false` on ConfigCat but not only, it can also be an `integer` or a `string`. We will consider as "truthy" any value which is not explicitly `bool(false)` or zero `int(0)` as an integer. It's impossible to define an empty string as a value from ConfigCat.
+> **Note:** You can define the actual value of a feature flag to be `bool(true)` or `bool(false)` on ConfigCat but not only, it can also be an `integer` or a `string`. We will consider as "truthy" any value which is not explicitly `bool(false)` or zero `int(0)` as an integer. It's impossible to define an empty string as a value from ConfigCat.
 
-If the feature flag is undefined or something went wrong, `false` will be returned by default.
+If the feature flag is undefined or something went wrong, `bool(false)` will be returned by default.
 
 ### Global helper
 
