@@ -18,7 +18,7 @@ class CheckFeature
      */
     public function handle($request, Closure $next, string $featureName)
     {
-        abort_if(Features::get($featureName) === false, Response::HTTP_NOT_FOUND);
+        abort_unless(Features::get($featureName), Response::HTTP_NOT_FOUND);
 
         return $next($request);
     }

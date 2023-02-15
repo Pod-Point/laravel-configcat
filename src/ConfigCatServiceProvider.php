@@ -90,7 +90,7 @@ class ConfigCatServiceProvider extends ServiceProvider
         Blade::directive('feature', function (string $feature, $user = null) {
             $expression = $user ? "{$feature}, {$user}" : "{$feature}";
 
-            return "<?php if (feature({$expression}) !== false): ?>";
+            return "<?php if (feature({$expression})): ?>";
         });
 
         Blade::directive('endfeature', function () {

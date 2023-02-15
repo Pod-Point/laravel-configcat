@@ -26,7 +26,7 @@ class RequiredIfFeature
             );
         }
 
-        if (Features::get($parameters[0]) !== false) {
+        if (Features::get($parameters[0])) {
             return $this->validateRequired($attribute, $value);
         }
 
