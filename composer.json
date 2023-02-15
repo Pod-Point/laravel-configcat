@@ -30,7 +30,7 @@
         ],
         "psr-4": {
             "PodPoint\\ConfigCat\\": "src"
-        },
+        }
     },
     "autoload-dev": {
         "psr-4": {
