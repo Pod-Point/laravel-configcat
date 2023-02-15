@@ -41,7 +41,7 @@ $flag = Features::get('new_registration_flow');
 $flag = feature('new_registration_flow');
 ```
 
-**Note:** You can define the actual value of a feature flag to be `true` or `false` on ConfigCat but not only, it can also be an `integer` or a `string`. We will consider as "truthy" any value which is not explicitly `bool(false)` or zero `int(0)` as an integer. It's impossible to define an empty string as a value from ConfigCat.
+> **Note:** You can define the actual value of a feature flag to be `true` or `false` on ConfigCat but not only, it can also be an `integer` or a `string`. We will consider as "truthy" any value which is not explicitly `bool(false)` or zero `int(0)` as an integer. It's impossible to define an empty string as a value from ConfigCat.
 
 If the feature flag is undefined or something went wrong, `false` will be returned by default.
 
@@ -101,7 +101,7 @@ ConfigCat needs to understand the representation of your users from your applica
 
 Type hinting `$user` with `\App\Models\User` is completely optional. Feel free to use any other type or not use any at all.
 
-**Note:** for security reasons, all of the logic computation for the user targeting is executed on your application side of things using ConfigCat's SDK. No user details will be leaving your application in order find out wether or not a user should have a feature flag enabled or not.
+> **Note:** for security reasons, all of the logic computation for the user targeting is executed on your application side of things using ConfigCat's SDK. No user details will be leaving your application in order find out wether or not a user should have a feature flag enabled or not.
 
 Once you have defined your mapping, you will be able to explicitly use the representation of your user when checking a feature flag:
 
@@ -125,7 +125,7 @@ feature('new_registration_flow', $user);
 @endfeature
 ```
 
-**Note:** if you have defined your user mapping but are not explicitly using a specific user when checking for a flag, we will automatically try to use the logged in user, if any, for convenience.
+> **Note:** if you have defined your user mapping but are not explicitly using a specific user when checking for a flag, we will automatically try to use the logged in user, if any, for convenience.
 
 ### Caching & logging
 
