@@ -13,7 +13,7 @@ return [
 
     'key' => env('CONFIGCAT_KEY', 'none'),
 
-   /*
+    /*
     |--------------------------------------------------------------------------
     | ConfigCat Logging
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | is also compatible with Monolog. Here you can specify which one of
     | your application log channel you would like to use for such log
     | messages as well as the log level to use for the SDK. We took
-    | care to setup some sensible defaults.
+    | care to set up some sensible defaults.
     |
     | See https://configcat.com/docs/sdk-reference/php/#logging
     */
@@ -44,7 +44,7 @@ return [
     | in order to prevent doing too many HTTP calls. Here you can specify
     | which cache store defined within config/cache.php you'd like to
     | use as well as at which interval in seconds you would like it
-    | to live for. We took care to setup some sensible defaults.
+    | to live for. We took care to set up some sensible defaults.
     |
     | See https://configcat.com/docs/sdk-reference/php/#cache
     */
@@ -67,10 +67,10 @@ return [
     | ConfigCat will understand. Make sure to map and transform your
     | user before returning an instance of \ConfigCat\User::class
     |
-    | If this is defined and you don't pass a user representation explicitly
+    | If this is defined, and you don't pass a user representation explicitly
     | when resolving a feature flag with feature() or Features::get(), we
-    | will automatically use the logged in user if found when trying to
-    | resolve a feature flag value based on the logic you have setup
+    | will automatically use the logged-in user if found when trying to
+    | resolve a feature flag value based on the logic you have set up
     | directly on ConfigCat Dashboard.
     |
     | Note: for security reason, no user information is transiting through HTTP
