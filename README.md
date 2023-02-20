@@ -5,7 +5,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Total Downloads](https://img.shields.io/packagist/dt/pod-point/laravel-configcat.svg?style=flat-square)](https://packagist.org/packages/pod-point/laravel-configcat)
 
-Implement feature flags with [ConfigCat](https://configcat.com) cloud service.
+Implement feature flags within your Laravel application using [ConfigCat](https://configcat.com) cloud service.
 
 ## Installation
 
