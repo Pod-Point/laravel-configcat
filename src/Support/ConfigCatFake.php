@@ -5,7 +5,7 @@ namespace PodPoint\ConfigCat\Support;
 use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 use Illuminate\Support\Arr;
 
-class FeaturesFake
+class ConfigCatFake
 {
     /** @var FeatureFlagProviderContract */
     protected $provider;

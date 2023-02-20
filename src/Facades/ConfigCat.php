@@ -3,29 +3,29 @@
 namespace PodPoint\ConfigCat\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use PodPoint\ConfigCat\Support\FeaturesFake;
+use PodPoint\ConfigCat\Support\ConfigCatFake;
 
 /**
  * @see \PodPoint\ConfigCat\ConfigCat
  */
-class Features extends Facade
+class ConfigCat extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'features';
+        return 'configcat';
     }
 
     /**
-     * Fakes the Features facade completely using while using an array in-memory to
+     * Fakes the ConfigCat facade completely using while using an array in-memory to
      * store the faked feature flags.
      *
      * Recommended to be used with in-memory unit/integration tests scenario instead
      * of end-to-end browser tests.
      *
      * @param array $flagsToFake
-     * @return FeaturesFake
+     * @return ConfigCatFake
      */
-    public static function fake(array $flagsToFake = []): FeaturesFake
+    public static function fake(array $flagsToFake = []): ConfigCatFake
     {
         if (! app()->environment('testing')) {
             throw new \RuntimeException('fake() can only be used within a *testing* environment');
@@ -35,7 +35,7 @@ class Features extends Facade
             return (static::$resolvedInstance[static::getFacadeAccessor()])->fake($flagsToFake);
         }
 
-        static::swap($fake = new FeaturesFake(static::getFacadeRoot(), $flagsToFake));
+        static::swap($fake = new ConfigCatFake(static::getFacadeRoot(), $flagsToFake));
 
         return $fake;
     }
@@ -45,6 +45,6 @@ class Features extends Facade
         $name = static::getFacadeAccessor();
 
         return isset(static::$resolvedInstance[$name]) &&
-            static::$resolvedInstance[$name] instanceof FeaturesFake;
+            static::$resolvedInstance[$name] instanceof ConfigCatFake;
     }
 }

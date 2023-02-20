@@ -1,8 +1,8 @@
 <?php
 
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
-if (! function_exists('feature')) {
+if (! function_exists('configcat')) {
     /**
      * Retrieves a feature flag from a configured feature flag Provider configured within
      * the config/features.php file. It can return a boolean or string/int based flag.
@@ -12,10 +12,10 @@ if (! function_exists('feature')) {
      * @param mixed|null $user
      * @return bool|string|int
      */
-    function feature(string $feature, $user = null)
+    function configcat(string $feature, $user = null)
     {
         return $user
-            ? Features::get($feature, $user)
-            : Features::get($feature);
+            ? ConfigCat::get($feature, $user)
+            : ConfigCat::get($feature);
     }
 }

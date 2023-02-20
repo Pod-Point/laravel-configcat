@@ -45,7 +45,7 @@
                 "PodPoint\\ConfigCat\\ConfigCatServiceProvider"
             ],
             "aliases": {
-                "Features": "PodPoint\\ConfigCat\\Facades\\Features"
+                "ConfigCat": "PodPoint\\ConfigCat\\Facades\\ConfigCat"
             }
         }
     },

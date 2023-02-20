@@ -1,11 +1,13 @@
 <html>
     <body>
-        @feature('enabled_feature')
+        @configcat('enabled_feature')
           I should be visible
-        @endfeature
+        @else
+          I should not be visible
+        @endconfigcat
 
-        @feature('disabled_feature')
+        @configcat('disabled_feature')
           I am hidden
-        @endfeature
+        @endconfigcat
     </body>
 </html>

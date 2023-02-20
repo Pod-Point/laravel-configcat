@@ -32,7 +32,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageAliases($app)
     {
         return [
-            'Features' => \PodPoint\ConfigCat\Facades\Features::class,
+            'ConfigCat' => \PodPoint\ConfigCat\Facades\ConfigCat::class,
         ];
     }
 

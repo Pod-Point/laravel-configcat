@@ -68,7 +68,7 @@ return [
     | user before returning an instance of \ConfigCat\User::class
     |
     | If this is defined, and you don't pass a user representation explicitly
-    | when resolving a feature flag with feature() or Features::get(), we
+    | when resolving a feature flag with configcat() or ConfigCat::get(), we
     | will automatically use the logged-in user if found when trying to
     | resolve a feature flag value based on the logic you have set up
     | directly on ConfigCat Dashboard.
@@ -93,7 +93,7 @@ return [
     | and will instead use the file specified to retrieve any feature flag's
     | values. This can be useful in order to force some overrides at all
     | times. This can also be used in parallel with the facade method
-    | Features::override() when willing to fake and control flags
+    | ConfigCat::override() when willing to fake and control flags
     | at will within an end-to-end test case scenario.
     |
     | See https://configcat.com/docs/sdk-reference/php/#flag-overrides

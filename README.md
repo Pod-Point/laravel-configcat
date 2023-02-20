@@ -31,59 +31,76 @@ See [`config/configcat.php`](config/configcat.php) for more details.
 
 ### Facade & global helper
 
-The `Features` facade as well as the global helper can be used to retrieve the actual value of the feature flag:
+The `ConfigCat` facade as well as the global helper can be used to retrieve the actual value of the feature flag, text or number setting:
 
 ```php
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
-$flag = Features::get('new_registration_flow');
+$flag = ConfigCat::get('new_registration_flow');
 
-$flag = feature('new_registration_flow');
+$flag = configcat('new_registration_flow');
 ```
 
-> **Note:** You can define the actual value of a feature flag to be `bool(true)` or `bool(false)` on ConfigCat but not only, it can also be an `integer` or a `string`. We will consider as "truthy" any value which is not explicitly `bool(false)` or zero `int(0)` as an integer. It's impossible to define an empty string as a value from ConfigCat.
+> **Note:** You can define the actual value of a feature flag to be `bool(true)` or `bool(false)` on ConfigCat but not only, it can also be [a number or a text setting](https://configcat.com/docs/main-concepts/#about-setting-types).
 
 If the feature flag is undefined or something went wrong, `bool(false)` will be returned by default.
 
-### Global helper
-
-This will retrieve the actual value of the feature flag:
-
-```php
-feature('new_registration_flow');
-```
-
 ### Validation rule
 
-The `email` will be a required field upon the following validation if the feature flag is truthy:
+Given the following validation rules:
 
 ```php
 Validator::make([
-    'email' => 'taylor@laravel.com'
+    'email' => 'taylor@laravel.com',
+    'username' => 'taylor',
 ], [
-    'email' => 'required_if_feature:new_registration_flow',
+    'email' => 'required_if_configcat:new_registration_flow,true',
+    'username' => 'required_if_configcat:new_registration_flow,false',
 ]);
 ```
 
+- When the feature flag is **on**
+  - The `email` will be a required field
+  - The `username` will be an optional field
+- When the feature flag is **off**, undefined, a text or number setting
+  - The `email` will be an optional field
+  - The `username` will be a required field
+
 ### HTTP middleware
 
-The following route will only be accessible if the feature flag is truthy:
+The following route will only be accessible if the [feature flag](https://configcat.com/docs/main-concepts/#about-setting-types) is truthy, otherwise a `404` will be thrown.
 
 ```php
-Router::get('/registration')->middleware('feature:new_registration_flow');
+Router::get('/registration')->middleware('configcat.on:new_registration_flow');
 ```
 
-Otherwise a `404` will be thrown.
+The opposite is possible, also throwing a `404` if the feature flag is falsy:
+
+```php
+Router::get('/sign-up')->middleware('configcat.off:new_registration_flow');
+```
+
+**Note:** undefined, text or number settings will be considered as feature flags turned `off`.
 
 ### Blade directive
 
 The following view content will only be rendered if the feature flag is truthy:
 
 ```blade
-@feature('new_registration_flow')
+@configcat('new_registration_flow')
     New registration form
-@endfeature
+@endconfigcat
 ```
+
+```blade
+@configcat('new_registration_flow')
+    Sign up
+@else
+    Register
+@endconfigcat
+```
+
+**Note:** undefined, text or number settings will be considered as feature flags turned `off`.
 
 ## Advanced usage
 
@@ -107,22 +124,22 @@ Once you have defined your mapping, you will be able to explicitly use the repre
 
 ```php
 use App\Models\User;
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
 $user = User::where('email', 'taylor@laravel.com')->firstOrFail();
-Features::get('new_registration_flow', $user);
+ConfigCat::get('new_registration_flow', $user);
 ```
 
 This is also applicable for the global helper and the Blade directive:
 
 ```php
-feature('new_registration_flow', $user);
+configcat('new_registration_flow', $user);
 ```
 
 ```blade
-@feature('new_registration_flow', $user)
+@configcat('new_registration_flow', $user)
     New registration form
-@endfeature
+@endconfigcat
 ```
 
 > **Note:** if you have defined your user mapping but are not explicitly using a specific user when checking for a flag, we will automatically try to use the logged in user, if any, for convenience.
@@ -142,9 +159,9 @@ When writing unit or functional tests, you may need to be able to mock or fake t
 **Mocking:**
 
 ```php
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
-Features::shouldReceive('get')
+ConfigCat::shouldReceive('get')
     ->once()
     ->with('new_registration_flow')
     ->andReturn(true);
@@ -157,12 +174,12 @@ See [https://laravel.com/docs/mocking#mocking-facades](https://laravel.com/docs/
 Faking it will prevent the package to genuinely try to hit ConfigCat's CDN:
 
 ```php
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
 // you can fake it
-Features::fake();
+ConfigCat::fake();
 // optionally setup some predefined feature flags for your test
-Features::fake(['new_registration_flow' => true]);
+ConfigCat::fake(['new_registration_flow' => true]);
 ```
 
 #### End-to-end testing
@@ -171,12 +188,12 @@ When running tests within a browser which doesn't share the same instance of the
 
 First of all, you will need to make sure to enable `overrides` from [`config/configcat.php`](config/configcat.php). You could also optionally configure the file path for the `json` file if you wish to. The file will be automatically created for you when using overrides.
 
-Similarly to `Features::fake()` you can configure some predefined feature flags which will be saved into a `json` file:
+Similarly to `ConfigCat::fake()` you can configure some predefined feature flags which will be saved into a `json` file:
 
 ```php
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
-Features::override(['new_registration_flow' => true]);
+ConfigCat::override(['new_registration_flow' => true]);
 ```
 
 ## Testing

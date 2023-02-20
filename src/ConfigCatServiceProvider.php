@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use PodPoint\ConfigCat\Middlewares\CheckFeature;
+use PodPoint\ConfigCat\Middlewares\CheckFeatureFlagOff;
+use PodPoint\ConfigCat\Middlewares\CheckFeatureFlagOn;
 use PodPoint\ConfigCat\Rules\RequiredIfFeature;
 
 class ConfigCatServiceProvider extends ServiceProvider
@@ -74,7 +75,7 @@ class ConfigCatServiceProvider extends ServiceProvider
 
     private function registerFacade()
     {
-        $this->app->singleton('features', function ($app) {
+        $this->app->singleton('configcat', function ($app) {
             return new ConfigCat(
                 $app->make(ClientInterface::class),
                 $app['config']['configcat.user'],
@@ -87,24 +88,26 @@ class ConfigCatServiceProvider extends ServiceProvider
 
     protected function bladeDirectives()
     {
-        Blade::directive('feature', function (string $feature, $user = null) {
+        Blade::directive('configcat', function (string $feature, $user = null) {
             $expression = $user ? "{$feature}, {$user}" : "{$feature}";
 
-            return "<?php if (feature({$expression})): ?>";
+            return "<?php if (configcat({$expression})): ?>";
         });
 
-        Blade::directive('endfeature', function () {
+        Blade::directive('endconfigcat', function () {
             return "<?php endif; ?>";
         });
     }
 
     protected function middlewares()
     {
-        $this->app->make(Router::class)->aliasMiddleware('feature', CheckFeature::class);
+        $this->app->make(Router::class)
+            ->aliasMiddleware('configcat.on', CheckFeatureFlagOn::class)
+            ->aliasMiddleware('configcat.off', CheckFeatureFlagOff::class);
     }
 
     protected function validationRules()
     {
-        Validator::extendImplicit('required_if_feature', RequiredIfFeature::class);
+        Validator::extendImplicit('required_if_configcat', RequiredIfFeature::class);
     }
 }

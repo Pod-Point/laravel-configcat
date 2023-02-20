@@ -6,48 +6,48 @@ use ConfigCat\ClientInterface;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Mockery\MockInterface;
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 use PodPoint\ConfigCat\Tests\TestCase;
 
 class ConfigCatTest extends TestCase
 {
     public function test_global_helper_can_be_used_to_check_if_a_feature_flag_is_enabled_or_disabled()
     {
-        Features::fake([
+        ConfigCat::fake([
             'some_enabled_feature' => true,
             'some_disabled_feature' => false,
         ]);
 
-        $this->assertTrue(feature('some_enabled_feature'));
-        $this->assertFalse(feature('some_disabled_feature'));
+        $this->assertTrue(configcat('some_enabled_feature'));
+        $this->assertFalse(configcat('some_disabled_feature'));
     }
 
     public function test_global_helper_returns_false_when_a_feature_flag_does_not_exist()
     {
-        Features::fake(['some_feature' => true]);
+        ConfigCat::fake(['some_feature' => true]);
 
-        $this->assertFalse(feature('some_unknown_feature'));
+        $this->assertFalse(configcat('some_unknown_feature'));
     }
 
-    public function test_global_helper_can_retrieve_a_feature_flag_when_it_is_a_string()
+    public function test_global_helper_can_retrieve_a_text_setting()
     {
-        Features::fake(['some_feature_as_a_string' => 'foo']);
+        ConfigCat::fake(['some_feature_as_a_string' => 'foo']);
 
-        $this->assertEquals('foo', feature('some_feature_as_a_string'));
+        $this->assertEquals('foo', configcat('some_feature_as_a_string'));
     }
 
-    public function test_global_helper_can_retrieve_a_feature_flag_when_it_is_an_integer()
+    public function test_global_helper_can_retrieve_a_number_setting()
     {
-        Features::fake(['some_feature_as_a_string' => 123]);
+        ConfigCat::fake(['some_feature_as_a_string' => 123]);
 
-        $this->assertEquals(123, feature('some_feature_as_a_string'));
+        $this->assertEquals(123, configcat('some_feature_as_a_string'));
     }
 
     public function test_global_helper_relies_on_the_facade()
     {
-        Features::shouldReceive('get')->once()->with('some_feature');
+        ConfigCat::shouldReceive('get')->once()->with('some_feature');
 
-        feature('some_feature');
+        configcat('some_feature');
     }
 
     public function test_global_helper_can_be_used_with_a_given_user()
@@ -56,22 +56,22 @@ class ConfigCatTest extends TestCase
         $user->id = 123;
         $user->email = 'foo@bar.com';
 
-        Features::shouldReceive('get')->once()->with('some_feature', $user);
+        ConfigCat::shouldReceive('get')->once()->with('some_feature', $user);
 
-        feature('some_feature', $user);
+        configcat('some_feature', $user);
     }
 
     public function test_the_facade_can_override_feature_flags()
     {
         config(['configcat.overrides.enabled' => true]);
 
-        Features::override([
+        ConfigCat::override([
             'enabled_feature' => true,
             'disabled_feature' => false,
         ]);
 
-        $this->assertTrue(feature('enabled_feature'));
-        $this->assertFalse(feature('disabled_feature'));
+        $this->assertTrue(configcat('enabled_feature'));
+        $this->assertFalse(configcat('disabled_feature'));
 
         $this->assertTrue(File::exists(storage_path('app/features/configcat.json')));
         $this->assertEquals(
@@ -82,7 +82,7 @@ class ConfigCatTest extends TestCase
 
     public function test_the_blade_directive_will_render_something_only_when_the_corresponding_feature_flag_is_enabled()
     {
-        Features::fake([
+        ConfigCat::fake([
             'enabled_feature' => true,
             'disabled_feature' => false,
         ]);
@@ -95,13 +95,27 @@ class ConfigCatTest extends TestCase
         $this->get('/foo')->assertDontSee('I am hidden');
     }
 
+    public function test_the_blade_directive_supports_the_else_directive()
+    {
+        ConfigCat::fake([
+            'enabled_feature' => false,
+        ]);
+
+        Route::get('/foo', function () {
+            return view('feature');
+        });
+
+        $this->get('/foo')->assertDontSee('I should be visible');
+        $this->get('/foo')->assertSee('I should not be visible');
+    }
+
     public function test_config_cat_client_is_called_when_resolving_feature_flags()
     {
         $this->mock(ClientInterface::class, function (MockInterface $mock) {
             $mock->shouldReceive('getValue')->once();
         });
 
-        Features::get('some_feature');
+        ConfigCat::get('some_feature');
     }
 
     public function test_the_user_handler_can_be_used_when_resolving_feature_flags()
@@ -119,7 +133,7 @@ class ConfigCatTest extends TestCase
         $user->id = 456;
         $user->email = 'foo@baz.com';
 
-        Features::get('some_feature', $user);
+        ConfigCat::get('some_feature', $user);
     }
 
     public function test_the_user_handler_will_use_the_logged_in_user_by_default()
@@ -139,6 +153,6 @@ class ConfigCatTest extends TestCase
 
         $this->actingAs($user);
 
-        Features::get('some_feature');
+        ConfigCat::get('some_feature');
     }
 }

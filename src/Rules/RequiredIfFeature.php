@@ -3,7 +3,7 @@
 namespace PodPoint\ConfigCat\Rules;
 
 use Illuminate\Validation\Concerns\ValidatesAttributes;
-use PodPoint\ConfigCat\Facades\Features;
+use PodPoint\ConfigCat\Facades\ConfigCat;
 
 class RequiredIfFeature
 {
@@ -22,11 +22,21 @@ class RequiredIfFeature
     {
         if (! is_string($parameters[0] ?? null)) {
             throw new \InvalidArgumentException(
-                'First parameter for `required_if_feature` validation rule must be the name of the feature'
+                'First parameter for `required_if_configcat` validation rule must be the name of a feature flag'
             );
         }
 
-        if (Features::get($parameters[0])) {
+        if (! in_array(($parameters[1] ?? null), ['true', 'false'])) {
+            throw new \InvalidArgumentException(
+                'Second parameter for `required_if_configcat` validation rule must be either true or false'
+            );
+        }
+
+        if ($parameters[1] === 'true' && ConfigCat::get($parameters[0]) === true) {
+            return $this->validateRequired($attribute, $value);
+        }
+
+        if ($parameters[1] === 'false' && ConfigCat::get($parameters[0]) === false) {
             return $this->validateRequired($attribute, $value);
         }
 
