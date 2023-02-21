@@ -91,19 +91,19 @@ class ConfigCatServiceProvider extends ServiceProvider
         Blade::directive('configcat', function (string $featureKey, $user = null) {
             $expression = $user ? "{$featureKey}, {$user}" : "{$featureKey}";
 
-            return "<?php if (configcat({$expression})): ?>";
+            return "<?php if (configcat({$expression}) === true): ?>";
         });
 
         Blade::directive('elseconfigcat', function (string $feature, $user = null) {
             $expression = $user ? "{$feature}, {$user}" : "{$feature}";
 
-            return "<?php elseif (configcat({$expression})): ?>";
+            return "<?php elseif (configcat({$expression}) === true): ?>";
         });
 
         Blade::directive('unlessconfigcat', function (string $feature, $user = null) {
             $expression = $user ? "{$feature}, {$user}" : "{$feature}";
 
-            return "<?php if (! configcat({$expression})): ?>";
+            return "<?php if (configcat({$expression}) === false): ?>";
         });
 
         Blade::directive('endconfigcat', function () {
