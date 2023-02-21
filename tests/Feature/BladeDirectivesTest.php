@@ -47,8 +47,8 @@ class BladeDirectivesTest extends TestCase
             return view('feature');
         });
 
-        $this->get('/foo')->assertSee('I should be visible');
-        $this->get('/foo')->assertDontSee('I should not be visible');
+        $this->get('/foo')->assertDontSee('I should be visible');
+        $this->get('/foo')->assertSee('I should not be visible');
     }
 
     public function test_it_will_consider_a_feature_flag_as_a_text_setting_to_be_disabled()
@@ -62,8 +62,8 @@ class BladeDirectivesTest extends TestCase
             return view('feature');
         });
 
-        $this->get('/foo')->assertSee('I should be visible');
-        $this->get('/foo')->assertDontSee('I should not be visible');
+        $this->get('/foo')->assertDontSee('I should be visible');
+        $this->get('/foo')->assertSee('I should not be visible');
     }
 
     public function test_it_supports_the_unlessconfigcat_directive()
