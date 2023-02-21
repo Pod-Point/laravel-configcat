@@ -38,6 +38,28 @@ class ConfigCatTest extends TestCase
         ConfigCat::get('some_feature');
     }
 
+    public function test_false_is_the_default_value_automatically_set_when_resolving_feature_flags()
+    {
+        $this->mock(ClientInterface::class, function (MockInterface $mock) {
+            $mock->shouldReceive('getValue')
+                ->once()
+                ->with('some_feature', false, null);
+        });
+
+        ConfigCat::get('some_feature');
+    }
+
+    public function test_a_default_value_can_be_passed_when_resolving_feature_flags()
+    {
+        $this->mock(ClientInterface::class, function (MockInterface $mock) {
+            $mock->shouldReceive('getValue')
+                ->once()
+                ->with('some_feature', true, null);
+        });
+
+        ConfigCat::get('some_feature', true);
+    }
+
     public function test_the_user_handler_can_be_used_when_resolving_feature_flags()
     {
         $this->mock(ClientInterface::class, function (MockInterface $mock) {
@@ -53,7 +75,7 @@ class ConfigCatTest extends TestCase
         $user->id = 456;
         $user->email = 'foo@baz.com';
 
-        ConfigCat::get('some_feature', $user);
+        ConfigCat::get('some_feature', false, $user);
     }
 
     public function test_the_user_handler_will_use_the_logged_in_user_by_default()

@@ -39,11 +39,13 @@ class ConfigCatFake
      * feature flag is undefined.
      *
      * @param  string  $featureKey
-     * @return bool|string|int
+     * @param  bool|string|int|float  $default
+     * @param  mixed|null  $user
+     * @return bool|string|int|float
      */
-    public function get(string $featureKey)
+    public function get(string $featureKey, $default = false, $user = null)
     {
-        $featureValue = $this->featureFlags[$featureKey] ?? false;
+        $featureValue = $this->featureFlags[$featureKey] ?? $default;
 
         if (is_array($featureValue)) {
             $execution = $this->getCount($featureKey);

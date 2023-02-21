@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 use PodPoint\ConfigCat\Support\ConfigCatFake;
 
 /**
- * @method static bool|string|int get(string $featureKey, $user = null)
+ * @method static bool|string|int|float get(string $featureKey, $default = false, $user = null)
  * @method static void override(array $flagsToOverride = [])
  *
  * @see \PodPoint\ConfigCat\ConfigCat
