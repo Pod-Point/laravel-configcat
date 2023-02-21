@@ -43,7 +43,7 @@ $flag = configcat('new_registration_flow');
 
 > **Note:** You can define the actual value of a feature flag to be `bool(true)` or `bool(false)` on ConfigCat but not only, it can also be [a number or a text setting](https://configcat.com/docs/main-concepts/#about-setting-types).
 
-If the feature flag is undefined or something went wrong, `bool(false)` will be returned by default, however you can change this by specifying a default value when retrieving the feature flag value using:
+If the feature flag is undefined or something went wrong, `bool(false)` will be returned by default, however you can change this by specifying a default value **only when using the Facade or the global helper** to retrieve the feature flag value using:
 
 ```php
 use PodPoint\ConfigCat\Facades\ConfigCat;
