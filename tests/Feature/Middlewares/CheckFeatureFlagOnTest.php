@@ -43,7 +43,7 @@ class CheckFeatureFlagOnTest extends TestCase
 
     public function test_number_settings_are_treated_like_disabled_features_by_it()
     {
-        ConfigCat::fake(['some_feature' => 123]);
+        ConfigCat::fake(['some_feature' => 1234]);
 
         Route::post('/foo', function () {
             return response('Bar!');

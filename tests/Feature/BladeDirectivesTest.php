@@ -39,7 +39,7 @@ class BladeDirectivesTest extends TestCase
     public function test_it_will_consider_a_feature_flag_as_a_number_setting_to_be_disabled()
     {
         ConfigCat::fake([
-            'enabled_feature' => 123,
+            'enabled_feature' => 1234,
             'disabled_feature' => false,
         ]);
 

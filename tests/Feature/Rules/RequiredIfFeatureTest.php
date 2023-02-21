@@ -75,7 +75,7 @@ class RequiredIfFeatureTest extends TestCase
 
     public function test_a_field_is_optional_when_a_feature_flag_is_defined_as_a_number()
     {
-        ConfigCat::fake(['some_feature' => 123]);
+        ConfigCat::fake(['some_feature' => 1234]);
 
         $validator = Validator::make([
             'foo' => 'bar',
