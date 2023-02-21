@@ -91,14 +91,28 @@ class ConfigCatTest extends TestCase
             return view('feature');
         });
 
-        $this->get('/foo')->assertSee('I should be visible');
         $this->get('/foo')->assertDontSee('I am hidden');
+    }
+
+    public function test_the_blade_directive_supports_the_unlessconfigcat_directive()
+    {
+        ConfigCat::fake([
+            'enabled_feature' => true,
+            'disabled_feature' => false,
+        ]);
+
+        Route::get('/foo', function () {
+            return view('feature');
+        });
+
+        $this->get('/foo')->assertSee('I am not hidden');
     }
 
     public function test_the_blade_directive_supports_the_else_directive()
     {
         ConfigCat::fake([
             'enabled_feature' => false,
+            'disabled_feature' => false,
         ]);
 
         Route::get('/foo', function () {
@@ -107,6 +121,21 @@ class ConfigCatTest extends TestCase
 
         $this->get('/foo')->assertDontSee('I should be visible');
         $this->get('/foo')->assertSee('I should not be visible');
+    }
+
+    public function test_the_blade_directive_supports_the_elseconfigcat_directive()
+    {
+        ConfigCat::fake([
+            'enabled_feature' => true,
+            'disabled_feature' => false,
+        ]);
+
+        Route::get('/foo', function () {
+            return view('feature');
+        });
+
+        $this->get('/foo')->assertDontSee('You cannot see me');
+        $this->get('/foo')->assertSee('You can see me');
     }
 
     public function test_config_cat_client_is_called_when_resolving_feature_flags()

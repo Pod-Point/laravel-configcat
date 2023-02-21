@@ -93,8 +93,16 @@ The following view content will only be rendered if the feature flag is truthy:
 ```
 
 ```blade
-@configcat('new_registration_flow')
+@unlessconfigcat('new_registration_flow')
+    Old registration form
+@endconfigcat
+```
+
+```blade
+@configcat('new_registration_flow_1')
     Sign up
+@elseconfigcat('new_registration_flow_2')
+    Get started
 @else
     Register
 @endconfigcat
