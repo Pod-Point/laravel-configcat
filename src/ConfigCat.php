@@ -2,13 +2,13 @@
 
 namespace PodPoint\ConfigCat;
 
-use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 use ConfigCat\ClientInterface;
 use ConfigCat\ConfigCatClient;
 use ConfigCat\Override\FlagOverrides;
 use ConfigCat\Override\OverrideBehaviour;
 use ConfigCat\Override\OverrideDataSource;
 use Illuminate\Support\Facades\File;
+use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 
 class ConfigCat implements FeatureFlagProviderContract
 {
@@ -33,8 +33,8 @@ class ConfigCat implements FeatureFlagProviderContract
      * Retrieve a ConfigCat feature flag. According to the ConfigCat SDK it
      * will return false if the flag is undefined or if something went wrong.
      *
-     * @param string $featureKey
-     * @param mixed|null $user
+     * @param  string  $featureKey
+     * @param  mixed|null  $user
      * @return bool|string|int
      */
     public function get(string $featureKey, $user = null)
@@ -47,7 +47,7 @@ class ConfigCat implements FeatureFlagProviderContract
     /**
      * Conditionally apply the transformation of the user representation.
      *
-     * @param mixed|null $user
+     * @param  mixed|null  $user
      * @return \ConfigCat\User|null
      */
     private function transformUser($user = null): ?\ConfigCat\User
@@ -60,7 +60,7 @@ class ConfigCat implements FeatureFlagProviderContract
     /**
      * Setup the overrides for ConfigCat options.
      *
-     * @param string $filepath
+     * @param  string  $filepath
      * @return FlagOverrides|null
      */
     public static function overrides(string $filepath): ?FlagOverrides
@@ -77,7 +77,7 @@ class ConfigCat implements FeatureFlagProviderContract
      * will **only** be read from it if overrides are enabled from the
      * configuration.
      *
-     * @param array $flagsToOverride
+     * @param  array  $flagsToOverride
      * @return void
      */
     public function override(array $flagsToOverride)
@@ -93,7 +93,7 @@ class ConfigCat implements FeatureFlagProviderContract
      * Resolve the file path to use with overrides. This will also make sure
      * the path and file exist along the way.
      *
-     * @param string $filepath
+     * @param  string  $filepath
      * @return string
      */
     private static function localFile(string $filepath): string

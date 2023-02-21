@@ -28,7 +28,7 @@ class ConfigCat extends Facade
      * Recommended to be used with in-memory unit/integration tests scenario instead
      * of end-to-end browser tests.
      *
-     * @param array $flagsToFake
+     * @param  array  $flagsToFake
      * @return ConfigCatFake
      */
     public static function fake(array $flagsToFake = []): ConfigCatFake

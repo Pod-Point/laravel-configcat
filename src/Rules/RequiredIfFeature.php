@@ -10,10 +10,10 @@ class RequiredIfFeature
     use ValidatesAttributes;
 
     /**
-     * @param string $attribute
-     * @param mixed $value
-     * @param array $parameters
-     * @return boolean
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  array  $parameters
+     * @return bool
      */
     public function validate($attribute, $value, $parameters): bool
     {

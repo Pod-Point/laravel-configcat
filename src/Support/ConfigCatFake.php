@@ -2,8 +2,8 @@
 
 namespace PodPoint\ConfigCat\Support;
 
-use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 use Illuminate\Support\Arr;
+use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 
 class ConfigCatFake
 {
@@ -24,7 +24,7 @@ class ConfigCatFake
     /**
      * Defines the faked feature flags.
      *
-     * @param array $featureFlags
+     * @param  array  $featureFlags
      * @return self
      */
     public function fake($featureFlags = []): self
@@ -38,7 +38,7 @@ class ConfigCatFake
      * Retrieve a faked feature flag if it exists. Returns false if the faked
      * feature flag is undefined.
      *
-     * @param string $featureKey
+     * @param  string  $featureKey
      * @return bool|string|int
      */
     public function get(string $featureKey)
@@ -62,8 +62,8 @@ class ConfigCatFake
     /**
      * Forwards any other calls to the feature flag provider instance.
      *
-     * @param string $method
-     * @param array $args
+     * @param  string  $method
+     * @param  array  $args
      * @return void
      */
     public function __call(string $method, array $args)

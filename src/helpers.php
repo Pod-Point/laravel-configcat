@@ -8,8 +8,8 @@ if (! function_exists('configcat')) {
      * the config/features.php file. It can return a boolean or string/int based flag.
      * If no feature flag is found, false will be returned.
      *
-     * @param string $featureKey
-     * @param mixed|null $user
+     * @param  string  $featureKey
+     * @param  mixed|null  $user
      * @return bool|string|int
      */
     function configcat(string $featureKey, $user = null)

@@ -29,7 +29,7 @@ class ConfigCatServiceProvider extends ServiceProvider
 
         $this->registerFacade();
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/configcat.php', 'configcat');
+        $this->mergeConfigFrom(__DIR__.'/../config/configcat.php', 'configcat');
     }
 
     /**
@@ -41,7 +41,7 @@ class ConfigCatServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/configcat.php' => config_path('configcat.php'),
+                __DIR__.'/../config/configcat.php' => config_path('configcat.php'),
             ]);
         }
 
@@ -95,7 +95,7 @@ class ConfigCatServiceProvider extends ServiceProvider
         });
 
         Blade::directive('endconfigcat', function () {
-            return "<?php endif; ?>";
+            return '<?php endif; ?>';
         });
     }
 
