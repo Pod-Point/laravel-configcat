@@ -6,6 +6,7 @@ use ConfigCat\Cache\CacheItem;
 use ConfigCat\ClientInterface;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Mockery;
 use Mockery\MockInterface;
@@ -63,14 +64,19 @@ class ConfigCatTest extends TestCase
 
     public function test_it_can_use_laravel_logger()
     {
-        fclose(STDERR);
+        /** @var \Mockery\MockInterface $mock */
+        $mock = Mockery::mock(\Psr\Log\LoggerInterface::class);
+        $mock->shouldReceive('error')
+            ->with(Mockery::on(function ($message) {
+                return Str::contains($message, "Evaluating getValue('some_feature')");
+            }), Mockery::type('array'));
 
-        $this->mock('log', function (MockInterface $mock) {
-            $mock->shouldReceive('writeLog')
-                ->with('error', Mockery::on(function ($message) {
-                    return Str::contains($message, "Evaluating getValue('some_feature')");
-                }));
-        });
+        if ($this->app->version() >= '5.6.0') {
+            Log::shouldReceive('channel')->once()->andReturn($mock);
+        } else {
+            fclose(STDERR);
+            $this->instance('log', $mock);
+        }
 
         ConfigCat::get('some_feature');
     }
