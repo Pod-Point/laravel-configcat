@@ -78,7 +78,7 @@ class ConfigCatServiceProvider extends ServiceProvider
         $this->app->singleton('configcat', function ($app) {
             $default = $app['config']['configcat.default'];
 
-            if (! is_bool($default) && ! is_string($default) && ! is_int($default)  && ! is_float($default)) {
+            if (! is_bool($default) && ! is_string($default) && ! is_int($default) && ! is_float($default)) {
                 throw new \InvalidArgumentException('The default value can only be of type boolean, string, integer or float.');
             }
 
