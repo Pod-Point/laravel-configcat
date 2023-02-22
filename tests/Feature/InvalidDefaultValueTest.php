@@ -3,7 +3,6 @@
 namespace PodPoint\ConfigCat\Tests;
 
 use PodPoint\ConfigCat\Facades\ConfigCat;
-use PodPoint\ConfigCat\Tests\TestCase;
 
 class InvalidDefaultValueTest extends TestCase
 {
