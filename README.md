@@ -55,7 +55,7 @@ $flag = configcat('new_registration_flow', true);
 
 You can also globally sepcify a default value from the [`config/configcat.php`](https://github.com/Pod-Point/laravel-configcat/blob/main/config/configcat.php) file.
 
-:warning: **Only** `boolean`, `string` `integer` or `float` default values are supported as these are the only [setting types](https://configcat.com/docs/main-concepts/#about-setting-types) available from ConfigCat.
+:warning: **Only** `boolean`, `string`, `integer` or `float` default value types are supported as these are the only [setting types](https://configcat.com/docs/main-concepts/#about-setting-types) available from ConfigCat.
 
 ### Validation rule
 
