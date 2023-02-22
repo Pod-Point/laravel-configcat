@@ -78,6 +78,7 @@ class ConfigCatServiceProvider extends ServiceProvider
         $this->app->singleton('configcat', function ($app) {
             return new ConfigCat(
                 $app->make(ClientInterface::class),
+                $app['config']['configcat.default'],
                 $app['config']['configcat.user'],
                 $app['config']['configcat.overrides.enabled']
                     ? $app['config']['configcat.overrides.file']

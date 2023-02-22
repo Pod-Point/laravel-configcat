@@ -43,6 +43,8 @@ abstract class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('cache.default', 'file');
+
         $app['config']->set('configcat.key', 'testing');
 
         $app['config']->set('configcat.user', function ($user) {

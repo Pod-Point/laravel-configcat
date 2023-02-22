@@ -14,6 +14,8 @@ class ConfigCat implements FeatureFlagProviderContract
 {
     /** @var ConfigCatClient */
     protected $configCatClient;
+    /** @var mixed */
+    public $defaultValue = false;
     /** @var callable|null */
     protected $userHandler = null;
     /** @var string|null */
@@ -21,10 +23,12 @@ class ConfigCat implements FeatureFlagProviderContract
 
     public function __construct(
         ClientInterface $configCatClient,
+        $defaultValue = false,
         callable $userHandler = null,
         string $overridesFilePath = null
     ) {
         $this->configCatClient = $configCatClient;
+        $this->defaultValue = $defaultValue;
         $this->userHandler = $userHandler;
         $this->overridesFilePath = $overridesFilePath;
     }
@@ -34,13 +38,14 @@ class ConfigCat implements FeatureFlagProviderContract
      * will return false if the flag is undefined or if something went wrong.
      *
      * @param  string  $featureKey
-     * @param  bool|string|int|float  $default
+     * @param  mixed|null  $default
      * @param  mixed|null  $user
-     * @return bool|string|int|float
+     * @return mixed
      */
-    public function get(string $featureKey, $default = false, $user = null)
+    public function get(string $featureKey, $default = null, $user = null)
     {
-        $user = $this->transformUser($user ?: auth()->user());
+        $default = is_null($default) ? $this->defaultValue : $default;
+        $user = $this->transformUser(is_null($user) ? auth()->user() : $user);
 
         return $this->configCatClient->getValue($featureKey, $default, $user);
     }

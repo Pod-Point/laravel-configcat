@@ -29,11 +29,11 @@ class HelperTest extends TestCase
     {
         ConfigCat::fake(['some_feature' => true]);
 
-        $this->assertFalse(configcat('some_unknown_feature', false));
-        $this->assertTrue(configcat('some_unknown_feature', true));
-        $this->assertEquals('foo', configcat('some_unknown_feature', 'foo'));
-        $this->assertEquals(1234, configcat('some_unknown_feature', 1234));
-        $this->assertEquals(12.34, configcat('some_unknown_feature', 12.34));
+        $this->assertFalse(configcat('unknown_feature', false));
+        $this->assertTrue(configcat('unknown_feature', true));
+        $this->assertEquals('foo', configcat('unknown_feature', 'foo'));
+        $this->assertEquals(1234, configcat('unknown_feature', 1234));
+        $this->assertEquals(12.34, configcat('unknown_feature', 12.34));
     }
 
     public function test_global_helper_can_retrieve_a_text_setting()

@@ -8,10 +8,25 @@ return [
     |--------------------------------------------------------------------------
     |
     | SDK Key to access your feature flag and setting. Get it from ConfigCat
-    | Dashboard. This is required in order to use this package.
+    | Dashboard. This is a hard requirement in order to use this package.
+    | An invalid key like 'none' could be used when you are willing to
+    | make the package "offline" and only use default values.
     */
 
     'key' => env('CONFIGCAT_KEY', 'none'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default value
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define the value which will be returned every time there
+    | is a problem trying to reach for ConfigCat CDN or when the feature
+    | flag you are trying to retrieve could not be found. This can be
+    | overriden when using ConfigCat::get() or configcat() too.
+    */
+
+    'default' => false,
 
     /*
     |--------------------------------------------------------------------------
