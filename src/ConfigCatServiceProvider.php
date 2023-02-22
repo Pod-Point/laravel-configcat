@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use InvalidArgumentException;
 use PodPoint\ConfigCat\Middlewares\CheckFeatureFlagOff;
 use PodPoint\ConfigCat\Middlewares\CheckFeatureFlagOn;
 use PodPoint\ConfigCat\Rules\RequiredIfFeature;
@@ -80,7 +79,7 @@ class ConfigCatServiceProvider extends ServiceProvider
             $default = $app['config']['configcat.default'];
 
             if (! is_bool($default) || ! is_string($default)
-             || ! is_int($default)  || ! is_float($default)) {
+             || ! is_int($default) || ! is_float($default)) {
                 throw new \InvalidArgumentException('The default value can only be of type boolean, string, integer or float.');
             }
 
