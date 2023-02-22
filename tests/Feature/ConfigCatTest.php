@@ -15,12 +15,6 @@ use PodPoint\ConfigCat\Tests\TestCase;
 
 class ConfigCatTest extends TestCase
 {
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
-     */
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -120,7 +114,7 @@ class ConfigCatTest extends TestCase
         ConfigCat::get('foo', 'bar');
     }
 
-    public function test_a_null_default_will_use_the_default_configured_for_the_package()
+    public function test_null_as_a_default_value_will_use_the_default_value_configured_for_the_package()
     {
         $this->mock(ClientInterface::class, function (MockInterface $mock) {
             $mock->shouldReceive('getValue')
