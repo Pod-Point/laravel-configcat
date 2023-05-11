@@ -131,13 +131,13 @@ class ConfigCatTest extends TestCase
             $mock->shouldReceive('getValue')
                 ->once()
                 ->with('some_feature', false, \Mockery::on(function (\ConfigCat\User $user) {
-                    return $user->getIdentifier() === '456'
+                    return $user->getIdentifier() === '123'
                         && $user->getAttribute('Email') === 'foo@baz.com';
                 }));
         });
 
         $user = new \Illuminate\Foundation\Auth\User();
-        $user->id = 456;
+        $user->id = 123;
         $user->email = 'foo@baz.com';
 
         ConfigCat::get('some_feature', false, $user);
@@ -149,14 +149,14 @@ class ConfigCatTest extends TestCase
             $mock->shouldReceive('getValue')
                 ->once()
                 ->with('some_feature', false, \Mockery::on(function (\ConfigCat\User $user) {
-                    return $user->getIdentifier() === '789'
-                        && $user->getAttribute('Email') === 'foo@foo.com';
+                    return $user->getIdentifier() === '456'
+                        && $user->getAttribute('Email') === 'bar@foo.com';
                 }));
         });
 
         $user = new \Illuminate\Foundation\Auth\User();
-        $user->id = 789;
-        $user->email = 'foo@foo.com';
+        $user->id = 456;
+        $user->email = 'bar@foo.com';
 
         $this->actingAs($user);
 
