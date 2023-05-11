@@ -77,7 +77,7 @@ return [
     | ConfigCat User Object
     |--------------------------------------------------------------------------
     |
-    | This is an optional callable you can define to map some kind of user
+    | This is an optional Transformer you can define to map some kind of user
     | representation you may have within your application into one that
     | ConfigCat will understand. Make sure to map and transform your
     | user before returning an instance of \ConfigCat\User::class
@@ -95,9 +95,7 @@ return [
     | See https://configcat.com/docs/sdk-reference/php/#user-object
     */
 
-    // 'user' => function (\App\Models\User $user) {
-    //     return new \ConfigCat\User($user->id, $user->email);
-    // },
+    // 'user' => \PodPoint\ConfigCat\Support\DefaultUserTransformer::class,
 
     /*
     |--------------------------------------------------------------------------

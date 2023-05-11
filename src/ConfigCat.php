@@ -16,20 +16,20 @@ class ConfigCat implements FeatureFlagProviderContract
     protected $configCatClient;
     /** @var mixed */
     public $defaultValue = false;
-    /** @var callable|null */
-    protected $userHandler = null;
+    /** @var string|null */
+    protected $userTransformer = null;
     /** @var string|null */
     protected $overridesFilePath;
 
     public function __construct(
         ClientInterface $configCatClient,
         $defaultValue = false,
-        callable $userHandler = null,
+        string $userTransformer = null,
         string $overridesFilePath = null
     ) {
         $this->configCatClient = $configCatClient;
         $this->defaultValue = $defaultValue;
-        $this->userHandler = $userHandler;
+        $this->userTransformer = $userTransformer;
         $this->overridesFilePath = $overridesFilePath;
     }
 
@@ -51,16 +51,23 @@ class ConfigCat implements FeatureFlagProviderContract
     }
 
     /**
-     * Conditionally apply the transformation of the user representation.
+     * Conditionally apply the transformation of the user representation using
+     * an callable Class.
      *
      * @param  mixed|null  $user
      * @return \ConfigCat\User|null
+     *
+     * @see \ConfigCat\Support\DefaultUserTransformer
      */
     private function transformUser($user = null): ?\ConfigCat\User
     {
-        return $user && $this->userHandler && is_callable($this->userHandler)
-            ? call_user_func($this->userHandler, $user)
-            : null;
+        if (! $user || ! $this->userTransformer || ! class_exists($this->userTransformer)) {
+            return null;
+        }
+
+        $transformer = new $this->userTransformer;
+
+        return is_callable($transformer) ? $transformer($user) : null;
     }
 
     /**
