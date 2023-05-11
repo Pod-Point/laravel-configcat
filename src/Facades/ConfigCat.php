@@ -38,7 +38,7 @@ class ConfigCat extends Facade
         }
 
         if (static::isFake()) {
-            return (static::$resolvedInstance[static::getFacadeAccessor()])->fake($flagsToFake);
+            return static::$resolvedInstance[static::getFacadeAccessor()]->fake($flagsToFake);
         }
 
         static::swap($fake = new ConfigCatFake(static::getFacadeRoot(), $flagsToFake));
