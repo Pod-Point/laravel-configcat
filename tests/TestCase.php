@@ -47,9 +47,7 @@ abstract class TestCase extends Orchestra
 
         $app['config']->set('configcat.key', 'testing');
 
-        $app['config']->set('configcat.user', function ($user) {
-            return new \ConfigCat\User($user->id, $user->email);
-        });
+        $app['config']->set('configcat.user', \PodPoint\ConfigCat\Support\DefaultUserTransformer::class);
 
         $app['config']->set('configcat.overrides', [
             'enabled' => false,

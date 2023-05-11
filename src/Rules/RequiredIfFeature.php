@@ -23,7 +23,7 @@ class RequiredIfFeature
             );
         }
 
-        if (! in_array(($parameters[1] ?? null), ['true', 'false'])) {
+        if (! in_array($parameters[1] ?? null, ['true', 'false'])) {
             throw new \InvalidArgumentException(
                 'Second parameter for `required_if_configcat` validation rule must be either true or false'
             );
