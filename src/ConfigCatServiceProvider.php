@@ -63,7 +63,7 @@ class ConfigCatServiceProvider extends ServiceProvider
                 ClientOptions::CACHE => new LaravelCache(Cache::store($app['config']['configcat.cache.store'])),
                 ClientOptions::CACHE_REFRESH_INTERVAL => $app['config']['configcat.cache.interval'],
                 ClientOptions::LOGGER => $logger,
-                ClientOptions::LOG_LEVEL => (int)$app['config']['configcat.log.level'],
+                ClientOptions::LOG_LEVEL => (int) $app['config']['configcat.log.level'],
                 ClientOptions::FLAG_OVERRIDES => $app['config']['configcat.overrides.enabled']
                     ? ConfigCat::overrides($app['config']['configcat.overrides.file'])
                     : null,
