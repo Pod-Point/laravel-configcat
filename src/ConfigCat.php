@@ -95,7 +95,7 @@ class ConfigCat implements FeatureFlagProviderContract
      */
     public function override(array $flagsToOverride)
     {
-        if (app()->environment('testing') && $this->overridesFilePath) {
+        if (! app()->environment('production') && $this->overridesFilePath) {
             File::put(self::localFile($this->overridesFilePath), json_encode([
                 'flags' => $flagsToOverride,
             ]));
