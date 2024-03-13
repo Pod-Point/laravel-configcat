@@ -2,9 +2,13 @@
 
 namespace PodPoint\ConfigCat\Tests\Feature;
 
-use ConfigCat\Cache\CacheItem;
+use Carbon\Carbon;
+use ConfigCat\Cache\ArrayCache;
+use ConfigCat\Cache\ConfigEntry;
+use ConfigCat\Cache\LaravelCache;
 use ConfigCat\ClientInterface;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -15,7 +19,7 @@ use PodPoint\ConfigCat\Tests\TestCase;
 
 class ConfigCatTest extends TestCase
 {
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
@@ -29,7 +33,7 @@ class ConfigCatTest extends TestCase
 
     public function test_it_can_use_laravel_cache()
     {
-        $fakeCachedItem = new CacheItem();
+        $fakeCachedItem = new ArrayCache();
         $fakeCachedItem->config = [
             'f' => [
                 'some_feature' => [
@@ -49,6 +53,7 @@ class ConfigCatTest extends TestCase
 
         $this->mock('cache', function (MockInterface $mock) use ($mockedCacheStore) {
             $mock->shouldReceive('store')
+//                ->with(Mockery::on(function($arg) { dd( $arg); } ))
                 ->once()
                 ->andReturn($mockedCacheStore);
         });
@@ -65,12 +70,7 @@ class ConfigCatTest extends TestCase
                 return Str::contains($message, "Evaluating getValue('some_feature')");
             }), Mockery::type('array'));
 
-        if ($this->app->version() >= '5.6.0') {
-            Log::shouldReceive('channel')->once()->andReturn($mock);
-        } else {
-            fclose(STDERR);
-            $this->instance('log', $mock);
-        }
+        Log::shouldReceive('channel')->once()->andReturn($mock);
 
         ConfigCat::get('some_feature');
     }

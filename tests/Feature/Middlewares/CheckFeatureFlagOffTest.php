@@ -1,6 +1,6 @@
 <?php
 
-namespace PodPoint\ConfigCat\Tests\Feature\Middleware;
+namespace PodPoint\ConfigCat\Tests\Feature\Middlewares;
 
 use Illuminate\Support\Facades\Route;
 use PodPoint\ConfigCat\Facades\ConfigCat;

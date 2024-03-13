@@ -3,6 +3,7 @@
 namespace PodPoint\ConfigCat\Tests;
 
 use Closure;
+use Illuminate\Foundation\Application;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 use PodPoint\ConfigCat\ConfigCatServiceProvider;
@@ -12,10 +13,10 @@ abstract class TestCase extends Orchestra
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             ConfigCatServiceProvider::class,
@@ -25,10 +26,10 @@ abstract class TestCase extends Orchestra
     /**
      * Override application aliases.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      * @return array
      */
-    protected function getPackageAliases($app)
+    protected function getPackageAliases($app): array
     {
         return [
             'ConfigCat' => \PodPoint\ConfigCat\Facades\ConfigCat::class,
@@ -38,14 +39,14 @@ abstract class TestCase extends Orchestra
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('cache.default', 'file');
 
-        $app['config']->set('configcat.key', 'testing');
+        $app['config']->set('configcat.key', 'gL_tESTh5r6R6gAG6gRlpR/GH-A5gLI69brgKiR5eLGBs');
 
         $app['config']->set('configcat.user', \PodPoint\ConfigCat\Support\DefaultUserTransformer::class);
 
@@ -62,11 +63,11 @@ abstract class TestCase extends Orchestra
     /**
      * Mock an instance of an object in the container.
      *
-     * @param  string  $abstract
-     * @param  \Closure|null  $mock
-     * @return \Mockery\MockInterface
+     * @param string $abstract
+     * @param Closure|null  $mock
+     * @return object
      */
-    protected function mock($abstract, Closure $mock = null)
+    protected function mock($abstract, Closure $mock = null): object
     {
         return $this->instance($abstract, Mockery::mock(...array_filter(func_get_args())));
     }

@@ -10,12 +10,12 @@ class RequiredIfFeature
     use ValidatesAttributes;
 
     /**
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @param  array  $parameters
+     * @param string $attribute
+     * @param mixed  $value
+     * @param array $parameters
      * @return bool
      */
-    public function validate($attribute, $value, $parameters): bool
+    public function validate(string $attribute, mixed $value, array $parameters): bool
     {
         if (! is_string($parameters[0] ?? null)) {
             throw new \InvalidArgumentException(

@@ -23,7 +23,7 @@ class ConfigCatServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->registerConfigCatClient();
 
@@ -37,7 +37,7 @@ class ConfigCatServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -52,12 +52,10 @@ class ConfigCatServiceProvider extends ServiceProvider
         $this->validationRules();
     }
 
-    private function registerConfigCatClient()
+    private function registerConfigCatClient(): void
     {
         $this->app->singleton(ClientInterface::class, function ($app) {
-            $logger = $app->version() >= '5.6.0'
-                ? Log::channel($app['config']['configcat.log.channel'])
-                : $app['log'];
+            $logger = Log::channel($app['config']['configcat.log.channel']);
 
             $options = [
                 ClientOptions::CACHE => new LaravelCache(Cache::store($app['config']['configcat.cache.store'])),
@@ -65,7 +63,10 @@ class ConfigCatServiceProvider extends ServiceProvider
                 ClientOptions::LOGGER => $logger,
                 ClientOptions::LOG_LEVEL => (int) $app['config']['configcat.log.level'],
                 ClientOptions::FLAG_OVERRIDES => $app['config']['configcat.overrides.enabled']
-                    ? ConfigCat::overrides($app['config']['configcat.overrides.file'])
+                    ? new \ConfigCat\Override\FlagOverrides(
+                        \ConfigCat\Override\OverrideDataSource::localFile($app['config']['configcat.overrides.file']),
+                        \ConfigCat\Override\OverrideBehaviour::LOCAL_ONLY
+                    )
                     : null,
             ];
 
@@ -73,7 +74,7 @@ class ConfigCatServiceProvider extends ServiceProvider
         });
     }
 
-    private function registerFacade()
+    private function registerFacade(): void
     {
         $this->app->singleton('configcat', function ($app) {
             $default = $app['config']['configcat.default'];
@@ -93,7 +94,7 @@ class ConfigCatServiceProvider extends ServiceProvider
         });
     }
 
-    protected function bladeDirectives()
+    protected function bladeDirectives(): void
     {
         Blade::directive('configcat', function (string $featureKey, $user = null) {
             $expression = $user ? "{$featureKey}, {$user}" : "{$featureKey}";
@@ -118,14 +119,14 @@ class ConfigCatServiceProvider extends ServiceProvider
         });
     }
 
-    protected function middlewares()
+    protected function middlewares(): void
     {
         $this->app->make(Router::class)
             ->aliasMiddleware('configcat.on', CheckFeatureFlagOn::class)
             ->aliasMiddleware('configcat.off', CheckFeatureFlagOff::class);
     }
 
-    protected function validationRules()
+    protected function validationRules(): void
     {
         Validator::extendImplicit('required_if_configcat', RequiredIfFeature::class);
     }

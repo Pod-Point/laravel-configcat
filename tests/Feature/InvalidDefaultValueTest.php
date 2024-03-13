@@ -6,7 +6,7 @@ use PodPoint\ConfigCat\Facades\ConfigCat;
 
 class InvalidDefaultValueTest extends TestCase
 {
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 

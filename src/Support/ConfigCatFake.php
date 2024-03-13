@@ -7,12 +7,11 @@ use PodPoint\ConfigCat\Contracts\FeatureFlagProviderContract;
 
 class ConfigCatFake
 {
-    /** @var FeatureFlagProviderContract */
-    protected $provider;
-    /** @var array */
-    protected $featureFlags = [];
-    /** @var array */
-    protected $flagCounts = [];
+    protected FeatureFlagProviderContract $provider;
+
+    protected array $featureFlags = [];
+
+    protected array $flagCounts = [];
 
     public function __construct(FeatureFlagProviderContract $provider, $featureFlags = [])
     {
@@ -24,10 +23,10 @@ class ConfigCatFake
     /**
      * Defines the faked feature flags.
      *
-     * @param  array  $featureFlags
+     * @param array $featureFlags
      * @return self
      */
-    public function fake($featureFlags = []): self
+    public function fake(array $featureFlags = []): self
     {
         $this->featureFlags = Arr::wrap($featureFlags);
 
@@ -38,12 +37,12 @@ class ConfigCatFake
      * Retrieve a faked feature flag if it exists. Returns false if the faked
      * feature flag is undefined.
      *
-     * @param  string  $featureKey
-     * @param  mixed|null  $default
-     * @param  mixed|null  $user
+     * @param string  $featureKey
+     * @param mixed|null $default
+     * @param mixed|null $user
      * @return mixed
      */
-    public function get(string $featureKey, $default = null, $user = null)
+    public function get(string $featureKey, mixed $default = null, mixed $user = null): mixed
     {
         $featureValue = $this->featureFlags[$featureKey] ?? ($default ?: $this->provider->defaultValue);
 
