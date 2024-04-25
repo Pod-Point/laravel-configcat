@@ -33,27 +33,25 @@ class ConfigCatTest extends TestCase
 
     public function test_it_can_use_laravel_cache()
     {
-        $fakeCachedItem = new ArrayCache();
-        $fakeCachedItem->config = [
+        $entry = ConfigEntry::fromConfigJson(json_encode([
             'f' => [
                 'some_feature' => [
-                    'v' => 'some_cached_value',
+                    'v' => ['s' => 'some_cached_value'],
                     'i' => '430bded3',
                     't' => 1,
                 ],
             ],
-        ];
+        ]), '430bded3', Carbon::now()->timestamp * 1000);
 
         /** @var \Mockery\MockInterface $mockedCacheStore */
         $mockedCacheStore = Mockery::mock(Repository::class);
         $mockedCacheStore
             ->shouldReceive('get')
             ->once()
-            ->andReturn(serialize($fakeCachedItem));
+            ->andReturn($entry->serialize());
 
         $this->mock('cache', function (MockInterface $mock) use ($mockedCacheStore) {
             $mock->shouldReceive('store')
-//                ->with(Mockery::on(function($arg) { dd( $arg); } ))
                 ->once()
                 ->andReturn($mockedCacheStore);
         });
