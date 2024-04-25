@@ -3,12 +3,9 @@
 namespace PodPoint\ConfigCat\Tests\Feature;
 
 use Carbon\Carbon;
-use ConfigCat\Cache\ArrayCache;
 use ConfigCat\Cache\ConfigEntry;
-use ConfigCat\Cache\LaravelCache;
 use ConfigCat\ClientInterface;
 use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
