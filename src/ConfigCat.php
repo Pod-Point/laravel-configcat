@@ -31,6 +31,10 @@ class ConfigCat implements FeatureFlagProviderContract
         $this->defaultValue = $defaultValue;
         $this->userTransformer = $userTransformer;
         $this->overridesFilePath = $overridesFilePath;
+
+        if ($overridesFilePath) {
+            $this->localFile($overridesFilePath);
+        }
     }
 
     /**
@@ -71,10 +75,10 @@ class ConfigCat implements FeatureFlagProviderContract
     /**
      * Setup the overrides for ConfigCat options.
      *
-     * @param string $filepath
+     * @param ?string $filepath
      * @return FlagOverrides|null
      */
-    public static function overrides(string $filepath): ?FlagOverrides
+    public static function overrides(?string $filepath): ?FlagOverrides
     {
         return $filepath ? new FlagOverrides(
             OverrideDataSource::localFile(self::localFile($filepath)),
@@ -94,7 +98,7 @@ class ConfigCat implements FeatureFlagProviderContract
     public function override(array $flagsToOverride): void
     {
         if (! app()->environment('production') && $this->overridesFilePath) {
-            File::put(self::localFile($this->overridesFilePath), json_encode([
+            File::put($this->overridesFilePath, json_encode([
                 'flags' => $flagsToOverride,
             ]));
         }

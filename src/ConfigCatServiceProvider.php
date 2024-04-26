@@ -62,12 +62,7 @@ class ConfigCatServiceProvider extends ServiceProvider
                 ClientOptions::CACHE_REFRESH_INTERVAL => $app['config']['configcat.cache.interval'],
                 ClientOptions::LOGGER => $logger,
                 ClientOptions::LOG_LEVEL => (int) $app['config']['configcat.log.level'],
-                ClientOptions::FLAG_OVERRIDES => $app['config']['configcat.overrides.enabled']
-                    ? new \ConfigCat\Override\FlagOverrides(
-                        \ConfigCat\Override\OverrideDataSource::localFile($app['config']['configcat.overrides.file']),
-                        \ConfigCat\Override\OverrideBehaviour::LOCAL_ONLY
-                    )
-                    : null,
+                ClientOptions::FLAG_OVERRIDES => ConfigCat::overrides($app['config']['configcat.overrides.enabled'] ? $app['config']['configcat.overrides.file'] : null),
             ];
 
             return new ConfigCatClient($app['config']['configcat.key'], $options);
