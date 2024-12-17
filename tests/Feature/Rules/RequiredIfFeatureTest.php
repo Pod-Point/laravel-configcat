@@ -1,88 +1,76 @@
 <?php
 
-namespace PodPoint\ConfigCat\Tests\Feature\Rules;
-
 use Illuminate\Support\Facades\Validator;
 use PodPoint\ConfigCat\Facades\ConfigCat;
-use PodPoint\ConfigCat\Tests\TestCase;
 
-class RequiredIfFeatureTest extends TestCase
-{
-    public function test_a_field_can_be_required_when_a_feature_flag_is_enabled()
-    {
-        ConfigCat::fake(['some_feature' => true]);
+test('a field can be required when a feature flag is enabled', function () {
+    ConfigCat::fake(['some_feature' => true]);
 
-        $validator = Validator::make([
-            'foo' => 'bar',
-        ], [
-            'some_field' => 'required_if_configcat:some_feature,true',
-        ]);
+    $validator = Validator::make([
+        'foo' => 'bar',
+    ], [
+        'some_field' => 'required_if_configcat:some_feature,true',
+    ]);
 
-        $this->assertTrue($validator->errors()->has('some_field'));
-    }
+    expect($validator->errors()->has('some_field'))->toBeTrue();
+});
 
-    public function test_a_field_can_be_optional_when_a_feature_flag_is_disabled()
-    {
-        ConfigCat::fake(['some_feature' => false]);
+test('a field can be optional when a feature flag is disabled', function () {
+    ConfigCat::fake(['some_feature' => false]);
 
-        $validator = Validator::make([
-            'foo' => 'bar',
-        ], [
-            'some_field' => 'required_if_configcat:some_feature,true',
-        ]);
+    $validator = Validator::make([
+        'foo' => 'bar',
+    ], [
+        'some_field' => 'required_if_configcat:some_feature,true',
+    ]);
 
-        $this->assertFalse($validator->errors()->has('some_field'));
-    }
+    expect($validator->errors()->has('some_field'))->toBeFalse();
+});
 
-    public function test_a_field_can_be_optional_when_a_feature_flag_is_enabled()
-    {
-        ConfigCat::fake(['some_feature' => true]);
+test('a field can be optional when a feature flag is enabled', function () {
+    ConfigCat::fake(['some_feature' => true]);
 
-        $validator = Validator::make([
-            'foo' => 'bar',
-        ], [
-            'some_field' => 'required_if_configcat:some_feature,false',
-        ]);
+    $validator = Validator::make([
+        'foo' => 'bar',
+    ], [
+        'some_field' => 'required_if_configcat:some_feature,false',
+    ]);
 
-        $this->assertFalse($validator->errors()->has('some_field'));
-    }
+    expect($validator->errors()->has('some_field'))->toBeFalse();
+});
 
-    public function test_a_field_can_be_required_when_a_feature_flag_is_disabled()
-    {
-        ConfigCat::fake(['some_feature' => false]);
+test('a field can be required when a feature flag is disabled', function () {
+    ConfigCat::fake(['some_feature' => false]);
 
-        $validator = Validator::make([
-            'foo' => 'bar',
-        ], [
-            'some_field' => 'required_if_configcat:some_feature,false',
-        ]);
+    $validator = Validator::make([
+        'foo' => 'bar',
+    ], [
+        'some_field' => 'required_if_configcat:some_feature,false',
+    ]);
 
-        $this->assertTrue($validator->errors()->has('some_field'));
-    }
+    expect($validator->errors()->has('some_field'))->toBeTrue();
+});
 
-    public function test_a_field_is_optional_when_a_feature_flag_is_defined_as_a_string()
-    {
-        ConfigCat::fake(['some_feature' => 'foo']);
+test('a field is optional when a feature flag is defined as a string', function () {
+    ConfigCat::fake(['some_feature' => 'foo']);
 
-        $validator = Validator::make([
-            'foo' => 'bar',
-        ], [
-            'some_field' => 'required_if_configcat:some_feature,true',
-        ]);
+    $validator = Validator::make([
+        'foo' => 'bar',
+    ], [
+        'some_field' => 'required_if_configcat:some_feature,true',
+    ]);
 
-        $this->assertFalse($validator->errors()->has('some_field'));
-    }
+    expect($validator->errors()->has('some_field'))->toBeFalse();
+});
 
-    public function test_a_field_is_optional_when_a_feature_flag_is_defined_as_a_number()
-    {
-        ConfigCat::fake(['some_feature' => 1234]);
+test('a field is optional when a feature flag is defined as a number', function () {
+    ConfigCat::fake(['some_feature' => 1234]);
 
-        $validator = Validator::make([
-            'foo' => 'bar',
-        ], [
-            'some_field' => 'required_if_configcat:some_feature,true',
-        ]);
+    $validator = Validator::make([
+        'foo' => 'bar',
+    ], [
+        'some_field' => 'required_if_configcat:some_feature,true',
+    ]);
 
-        $this->assertFalse($validator->errors()->has('some_field'));
-    }
-}
+    expect($validator->errors()->has('some_field'))->toBeFalse();
+});

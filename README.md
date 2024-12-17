@@ -18,7 +18,7 @@ composer require pod-point/laravel-configcat
 For Laravel 5.4 up to 9.x
 
 ```bash
-composer require pod-point/laravel-mail-export:^3.0
+composer require pod-point/laravel-configcat:^3.0
 ```
 
 ### Publishing the config file

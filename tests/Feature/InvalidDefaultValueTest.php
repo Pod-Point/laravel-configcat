@@ -1,22 +1,11 @@
 <?php
 
-namespace PodPoint\ConfigCat\Tests;
-
 use PodPoint\ConfigCat\Facades\ConfigCat;
 
-class InvalidDefaultValueTest extends TestCase
-{
-    protected function getEnvironmentSetUp($app): void
-    {
-        parent::getEnvironmentSetUp($app);
+test('null configured as a default value for the package will throw an exception', function () {
+    config()->set('configcat.default', null);
 
-        $app['config']->set('configcat.default', null);
-    }
+    $this->expectException(\InvalidArgumentException::class);
 
-    public function test_null_configured_as_a_default_value_for_the_package_will_throw_an_exception()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        ConfigCat::get('foo');
-    }
-}
+    ConfigCat::get('foo');
+});

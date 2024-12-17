@@ -1,112 +1,99 @@
 <?php
 
-namespace PodPoint\ConfigCat\Tests\Feature;
-
 use Illuminate\Support\Facades\Route;
 use PodPoint\ConfigCat\Facades\ConfigCat;
-use PodPoint\ConfigCat\Tests\TestCase;
 
-class BladeDirectivesTest extends TestCase
-{
-    public function test_it_will_render_something_only_when_the_corresponding_feature_flag_is_enabled()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => true,
-            'disabled_feature' => false,
-        ]);
+test('it will render something only when the corresponding feature flag is enabled', function () {
+    ConfigCat::fake([
+        'enabled_feature' => true,
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertDontSee('I am hidden');
-    }
+    $this->get('/foo')->assertDontSee('I am hidden');
+});
 
-    public function test_it_will_consider_an_unknown_feature_flag_to_be_disabled()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => true,
-            'disabled_feature' => false,
-        ]);
+test('it will consider an unknown feature flag to be disabled', function () {
+    ConfigCat::fake([
+        'enabled_feature' => true,
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertSee('You can see me');
-    }
+    $this->get('/foo')->assertSee('You can see me');
+});
 
-    public function test_it_will_consider_a_feature_flag_as_a_number_setting_to_be_disabled()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => 1234,
-            'disabled_feature' => false,
-        ]);
+test('it will consider a feature flag as a number setting to be disabled', function () {
+    ConfigCat::fake([
+        'enabled_feature' => 1234,
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertDontSee('I should be visible');
-        $this->get('/foo')->assertSee('I should not be visible');
-    }
+    $this->get('/foo')->assertDontSee('I should be visible');
+    $this->get('/foo')->assertSee('I should not be visible');
+});
 
-    public function test_it_will_consider_a_feature_flag_as_a_text_setting_to_be_disabled()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => 'foobar',
-            'disabled_feature' => false,
-        ]);
+test('it will consider a feature flag as a text setting to be disabled', function () {
+    ConfigCat::fake([
+        'enabled_feature' => 'foobar',
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertDontSee('I should be visible');
-        $this->get('/foo')->assertSee('I should not be visible');
-    }
+    $this->get('/foo')->assertDontSee('I should be visible');
+    $this->get('/foo')->assertSee('I should not be visible');
+});
 
-    public function test_it_supports_the_unlessconfigcat_directive()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => true,
-            'disabled_feature' => false,
-        ]);
+test('it supports the unlessconfigcat directive', function () {
+    ConfigCat::fake([
+        'enabled_feature' => true,
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertSee('I am not hidden');
-    }
+    $this->get('/foo')->assertSee('I am not hidden');
+});
 
-    public function test_it_supports_the_else_directive()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => false,
-            'disabled_feature' => false,
-        ]);
+test('it supports the else directive', function () {
+    ConfigCat::fake([
+        'enabled_feature' => false,
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertDontSee('I should be visible');
-        $this->get('/foo')->assertSee('I should not be visible');
-    }
+    $this->get('/foo')->assertDontSee('I should be visible');
+    $this->get('/foo')->assertSee('I should not be visible');
+});
 
-    public function test_it_supports_the_elseconfigcat_directive()
-    {
-        ConfigCat::fake([
-            'enabled_feature' => true,
-            'disabled_feature' => false,
-        ]);
+test('it supports the elseconfigcat directive', function () {
+    ConfigCat::fake([
+        'enabled_feature' => true,
+        'disabled_feature' => false,
+    ]);
 
-        Route::get('/foo', function () {
-            return view('feature');
-        });
+    Route::get('/foo', function () {
+        return view('feature');
+    });
 
-        $this->get('/foo')->assertDontSee('You cannot see me');
-        $this->get('/foo')->assertSee('You can see me');
-    }
-}
+    $this->get('/foo')->assertDontSee('You cannot see me');
+    $this->get('/foo')->assertSee('You can see me');
+});

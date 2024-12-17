@@ -16,7 +16,7 @@ abstract class TestCase extends Orchestra
      * @param Application $app
      * @return array
      */
-    protected function getPackageProviders($app): array
+    public function getPackageProviders($app): array
     {
         return [
             ConfigCatServiceProvider::class,
@@ -29,7 +29,7 @@ abstract class TestCase extends Orchestra
      * @param Application $app
      * @return array
      */
-    protected function getPackageAliases($app): array
+    public function getPackageAliases($app): array
     {
         return [
             'ConfigCat' => \PodPoint\ConfigCat\Facades\ConfigCat::class,
@@ -42,7 +42,7 @@ abstract class TestCase extends Orchestra
      * @param Application $app
      * @return void
      */
-    protected function getEnvironmentSetUp($app): void
+    public function getEnvironmentSetUp($app): void
     {
         $app['config']->set('cache.default', 'file');
 
@@ -67,7 +67,7 @@ abstract class TestCase extends Orchestra
      * @param Closure|null  $mock
      * @return object
      */
-    protected function mock($abstract, Closure $mock = null): object
+    public function mock($abstract, Closure $mock = null): object
     {
         return $this->instance($abstract, Mockery::mock(...array_filter(func_get_args())));
     }

@@ -1,7 +1,5 @@
 <?php
 
-namespace PodPoint\ConfigCat\Tests\Feature;
-
 use Carbon\Carbon;
 use ConfigCat\Cache\ConfigEntry;
 use ConfigCat\ClientInterface;
@@ -9,152 +7,132 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Mockery;
 use Mockery\MockInterface;
 use PodPoint\ConfigCat\Facades\ConfigCat;
-use PodPoint\ConfigCat\Tests\TestCase;
 
-class ConfigCatTest extends TestCase
-{
-    protected function getEnvironmentSetUp($app): void
-    {
-        parent::getEnvironmentSetUp($app);
+beforeEach(function () {
+    config()->set('configcat.default', 'some_default');
+});
 
-        $app['config']->set('configcat.default', 'some_default');
-    }
+test('it can be configured to use a default value', function () {
+    expect(ConfigCat::get('unknown_feature'))->toEqual('some_default');
+});
 
-    public function test_it_can_be_configured_to_use_a_default_value()
-    {
-        $this->assertEquals('some_default', ConfigCat::get('unknown_feature'));
-    }
-
-    public function test_it_can_use_laravel_cache()
-    {
-        $entry = ConfigEntry::fromConfigJson(json_encode([
-            'f' => [
-                'some_feature' => [
-                    'v' => ['s' => 'some_cached_value'],
-                    'i' => '430bded3',
-                    't' => 1,
-                ],
+test('it can use laravel cache', function () {
+    $entry = ConfigEntry::fromConfigJson(json_encode([
+        'f' => [
+            'some_feature' => [
+                'v' => ['s' => 'some_cached_value'],
+                'i' => '430bded3',
+                't' => 1,
             ],
-        ]), '430bded3', Carbon::now()->timestamp * 1000);
+        ],
+    ]), '430bded3', Carbon::now()->timestamp * 1000);
 
-        /** @var \Mockery\MockInterface $mockedCacheStore */
-        $mockedCacheStore = Mockery::mock(Repository::class);
-        $mockedCacheStore
-            ->shouldReceive('get')
+    /** @var \Mockery\MockInterface $mockedCacheStore */
+    $mockedCacheStore = Mockery::mock(Repository::class);
+    $mockedCacheStore
+        ->shouldReceive('get')
+        ->once()
+        ->andReturn($entry->serialize());
+
+    $this->mock('cache', function (MockInterface $mock) use ($mockedCacheStore) {
+        $mock->shouldReceive('store')
             ->once()
-            ->andReturn($entry->serialize());
+            ->andReturn($mockedCacheStore);
+    });
 
-        $this->mock('cache', function (MockInterface $mock) use ($mockedCacheStore) {
-            $mock->shouldReceive('store')
-                ->once()
-                ->andReturn($mockedCacheStore);
-        });
+    expect(ConfigCat::get('some_feature'))->toEqual('some_cached_value');
+});
 
-        $this->assertEquals('some_cached_value', ConfigCat::get('some_feature'));
-    }
+test('it can use laravel logger', function () {
+    /** @var \Mockery\MockInterface $mock */
+    $mock = Mockery::mock(\Psr\Log\LoggerInterface::class);
+    $mock->shouldReceive('error')
+        ->with(Mockery::on(function ($message) {
+            return Str::contains($message, "Evaluating getValue('some_feature')");
+        }), Mockery::type('array'));
 
-    public function test_it_can_use_laravel_logger()
-    {
-        /** @var \Mockery\MockInterface $mock */
-        $mock = Mockery::mock(\Psr\Log\LoggerInterface::class);
-        $mock->shouldReceive('error')
-            ->with(Mockery::on(function ($message) {
-                return Str::contains($message, "Evaluating getValue('some_feature')");
-            }), Mockery::type('array'));
+    Log::shouldReceive('channel')->once()->andReturn($mock);
 
-        Log::shouldReceive('channel')->once()->andReturn($mock);
+    ConfigCat::get('some_feature');
+});
 
-        ConfigCat::get('some_feature');
-    }
+test('the facade can override feature flags', function () {
+    config(['configcat.overrides.enabled' => true]);
 
-    public function test_the_facade_can_override_feature_flags()
-    {
-        config(['configcat.overrides.enabled' => true]);
+    ConfigCat::override([
+        'enabled_feature' => true,
+        'disabled_feature' => false,
+    ]);
 
-        ConfigCat::override([
-            'enabled_feature' => true,
-            'disabled_feature' => false,
-        ]);
+    expect(configcat('enabled_feature'))->toBeTrue();
+    expect(configcat('disabled_feature'))->toBeFalse();
 
-        $this->assertTrue(configcat('enabled_feature'));
-        $this->assertFalse(configcat('disabled_feature'));
+    expect(File::exists(storage_path('app/features/configcat.json')))->toBeTrue();
+    expect(File::get(storage_path('app/features/configcat.json')))->toEqual('{"flags":{"enabled_feature":true,"disabled_feature":false}}');
+});
 
-        $this->assertTrue(File::exists(storage_path('app/features/configcat.json')));
-        $this->assertEquals(
-            '{"flags":{"enabled_feature":true,"disabled_feature":false}}',
-            File::get(storage_path('app/features/configcat.json'))
-        );
-    }
+test('config cat client is called when resolving feature flags', function () {
+    $this->mock(ClientInterface::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getValue')->once();
+    });
 
-    public function test_config_cat_client_is_called_when_resolving_feature_flags()
-    {
-        $this->mock(ClientInterface::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getValue')->once();
-        });
+    ConfigCat::get('some_feature');
+});
 
-        ConfigCat::get('some_feature');
-    }
+test('a default value can be passed when resolving feature flags', function () {
+    $this->mock(ClientInterface::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getValue')
+            ->once()
+            ->with('foo', 'bar', null);
+    });
 
-    public function test_a_default_value_can_be_passed_when_resolving_feature_flags()
-    {
-        $this->mock(ClientInterface::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getValue')
-                ->once()
-                ->with('foo', 'bar', null);
-        });
+    ConfigCat::get('foo', 'bar');
+});
 
-        ConfigCat::get('foo', 'bar');
-    }
+test('null as a default value will use the default value configured for the package', function () {
+    $this->mock(ClientInterface::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getValue')
+            ->once()
+            ->with('foo', 'some_default', null);
+    });
 
-    public function test_null_as_a_default_value_will_use_the_default_value_configured_for_the_package()
-    {
-        $this->mock(ClientInterface::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getValue')
-                ->once()
-                ->with('foo', 'some_default', null);
-        });
+    ConfigCat::get('foo', null);
+});
 
-        ConfigCat::get('foo', null);
-    }
+test('the user handler can be used when resolving feature flags', function () {
+    $this->mock(ClientInterface::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getValue')
+            ->once()
+            ->with('some_feature', false, \Mockery::on(function (\ConfigCat\User $user) {
+                return $user->getIdentifier() === '123'
+                    && $user->getAttribute('Email') === 'foo@baz.com';
+            }));
+    });
 
-    public function test_the_user_handler_can_be_used_when_resolving_feature_flags()
-    {
-        $this->mock(ClientInterface::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getValue')
-                ->once()
-                ->with('some_feature', false, \Mockery::on(function (\ConfigCat\User $user) {
-                    return $user->getIdentifier() === '123'
-                        && $user->getAttribute('Email') === 'foo@baz.com';
-                }));
-        });
+    $user = new \Illuminate\Foundation\Auth\User();
+    $user->id = 123;
+    $user->email = 'foo@baz.com';
 
-        $user = new \Illuminate\Foundation\Auth\User();
-        $user->id = 123;
-        $user->email = 'foo@baz.com';
+    ConfigCat::get('some_feature', false, $user);
+});
 
-        ConfigCat::get('some_feature', false, $user);
-    }
+test('the user handler will use the logged in user by default', function () {
+    $this->mock(ClientInterface::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getValue')
+            ->once()
+            ->with('some_feature', false, \Mockery::on(function (\ConfigCat\User $user) {
+                return $user->getIdentifier() === '456'
+                    && $user->getAttribute('Email') === 'bar@foo.com';
+            }));
+    });
 
-    public function test_the_user_handler_will_use_the_logged_in_user_by_default()
-    {
-        $this->mock(ClientInterface::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getValue')
-                ->once()
-                ->with('some_feature', false, \Mockery::on(function (\ConfigCat\User $user) {
-                    return $user->getIdentifier() === '456'
-                        && $user->getAttribute('Email') === 'bar@foo.com';
-                }));
-        });
+    $user = new \Illuminate\Foundation\Auth\User();
+    $user->id = 456;
+    $user->email = 'bar@foo.com';
 
-        $user = new \Illuminate\Foundation\Auth\User();
-        $user->id = 456;
-        $user->email = 'bar@foo.com';
+    $this->actingAs($user);
 
-        $this->actingAs($user);
-
-        ConfigCat::get('some_feature', false);
-    }
-}
+    ConfigCat::get('some_feature', false);
+});
