@@ -17,13 +17,13 @@
         }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "configcat/configcat-client": "^9.0",
-        "illuminate/contracts": "^11.0"
+        "illuminate/contracts": "^10.0|^11.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0",
-        "phpunit/phpunit": "^10.5",
+        "orchestra/testbench": "^8.0|^9.0",
+        "phpunit/phpunit": "^9.6|^10.5",
         "mockery/mockery": "^1.6.7"
     },
     "autoload": {

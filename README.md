@@ -15,12 +15,6 @@ You can install the package via composer:
 composer require pod-point/laravel-configcat
 ```
 
-For Laravel 10.x
-
-```bash
-composer require pod-point/laravel-mail-export:^4.0
-```
-
 For Laravel 5.4 up to 9.x
 
 ```bash
@@ -83,12 +77,12 @@ Validator::make([
 ]);
 ```
 
-- When the feature flag is **on**
-  - The `email` will be a required field
-  - The `username` will be an optional field
-- When the feature flag is **off**, undefined, a text or number setting
-  - The `email` will be an optional field
-  - The `username` will be a required field
+-   When the feature flag is **on**
+    -   The `email` will be a required field
+    -   The `username` will be an optional field
+-   When the feature flag is **off**, undefined, a text or number setting
+    -   The `email` will be an optional field
+    -   The `username` will be a required field
 
 ### HTTP middleware
 
@@ -256,10 +250,10 @@ Please see [CONTRIBUTING](https://github.com/Pod-Point/laravel-configcat/blob/ma
 
 ## Credits
 
-- [configcat/php-sdk](https://github.com/configcat/php-sdk)
-- [ylsideas/feature-flags](https://github.com/ylsideas/feature-flags) for inspiration
-- [Pod Point](https://github.com/pod-point)
-- [All Contributors](https://github.com/pod-point/laravel-configcat/graphs/contributors)
+-   [configcat/php-sdk](https://github.com/configcat/php-sdk)
+-   [ylsideas/feature-flags](https://github.com/ylsideas/feature-flags) for inspiration
+-   [Pod Point](https://github.com/pod-point)
+-   [All Contributors](https://github.com/pod-point/laravel-configcat/graphs/contributors)
 
 ## License
 
